@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+
 import type { Database } from "@/src/db/client";
 import { users } from "@/src/db/schema";
 

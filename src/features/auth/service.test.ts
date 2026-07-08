@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { eq } from "drizzle-orm";
+
 import { users } from "@/src/db/schema";
 import { createTestDb } from "@/tests/helpers/db";
 

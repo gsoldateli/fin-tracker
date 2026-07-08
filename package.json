@@ -5,10 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "typecheck": "tsc --noEmit",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate:dev": "dotenv -e .env.development -- drizzle-kit migrate",
+    "drizzle:migrate:prod": "dotenv -e .env.production -- drizzle-kit migrate",
     "test:unit:watch": "vitest run --watch --fileParallelism"
   },
   "dependencies": {

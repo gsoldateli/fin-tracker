@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm/_relations";
-import { sqliteTable, real, text, integer } from "drizzle-orm/sqlite-core";
+// import { relations } from "drizzle-orm/_relations";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 // export const transactionTypeEnum = sqliteEnum("transaction_type", [
 //     "INCOME",

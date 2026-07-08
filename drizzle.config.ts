@@ -1,5 +1,5 @@
-require("dotenv").config();
-console.log()
+// require("dotenv").config();
+// console.log()
 import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
     out: './drizzle',
