@@ -10,10 +10,10 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v8
-      - uses: actions/setup-node@v8
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version-file: '.nvmrc'
           cache: npm
       - run: npm ci
       - run: npm run lint
