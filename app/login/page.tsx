@@ -11,9 +11,9 @@ export default async function LoginPage() {
         <main className="flex min-h-screen items-center justify-center p-4">
             <div className="w-full max-w-sm space-y-6">
                 <div className="space-y-2 text-center">
-                    <h1 className="text-2xl font-semibold tracking-tight">Entrar</h1>
+                    <h1 className="text-2xl font-semibold tracking-tight">Enter</h1>
                     <p className="text-sm text-muted-foreground">
-                        Digite seu e-mail para acessar ou criar sua conta
+                        Type your email to login or create an account
                     </p>
                 </div>
                 <LoginForm />

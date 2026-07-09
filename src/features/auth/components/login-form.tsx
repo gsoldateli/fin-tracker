@@ -13,7 +13,7 @@ export function LoginForm() {
             <Input
                 name="email"
                 type="email"
-                placeholder="seu@email.com"
+                placeholder="your@email.com"
                 required
                 autoFocus
             />
@@ -21,7 +21,7 @@ export function LoginForm() {
                 <p className="text-sm text-destructive">{state.error}</p>
             )}
             <Button type="submit" className="w-full" disabled={pending}>
-                {pending ? "Entrando..." : "Entrar"}
+                {pending ? "Entering..." : "Continue"}
             </Button>
         </form>
     );
