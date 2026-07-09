@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
+import { getSecret } from "./src/lib/session";
 
-const secret = new TextEncoder().encode(process.env.SESSION_SECRET!);
+const secret = getSecret();
 
 export async function proxy(req: NextRequest) {
     const token = req.cookies.get("session")?.value;
