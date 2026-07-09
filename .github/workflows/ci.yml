@@ -1,16 +1,19 @@
 name: CI
 
 on:
-  workflow_call:   # allow to be called by other workflows
+  pull_request:
+  push:
+    branches: [main, release]
+  workflow_call:
 
 jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: npm
       - run: npm ci
       - run: npm run lint
