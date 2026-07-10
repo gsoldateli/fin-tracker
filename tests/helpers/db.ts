@@ -6,15 +6,11 @@ import { unlink } from "node:fs/promises";
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
-import * as schema from "@/src/db/schema";
 
 export async function createTestDb() {
     const tmpPath = join(tmpdir(), `fintracker-test-${randomUUID()}.db`);
     const client = createClient({ url: `file:${tmpPath}` });
-    const db = drizzle({
-        client,
-
-    });
+    const db = drizzle({ client });
 
     await migrate(db, { migrationsFolder: path.resolve(__dirname, "../../drizzle") });
 

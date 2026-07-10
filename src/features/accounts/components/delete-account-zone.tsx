@@ -49,9 +49,9 @@ export function DeleteAccountZone({
     if (hasTransfers) {
         return (
             <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-6">
-                <h3 className="text-lg font-semibold text-destructive">Zona de perigo</h3>
+                <h3 className="text-lg font-semibold text-destructive">Danger Zone</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                    Contas com transferências não podem ser excluídas. Remova as transferências antes.
+                    Accounts with transfers cannot be deleted. Remove the transfers first.
                 </p>
                 <Button
                     type="button"
@@ -59,7 +59,7 @@ export function DeleteAccountZone({
                     variant="destructive"
                     className="mt-4 cursor-not-allowed opacity-50"
                 >
-                    Excluir conta
+                    Delete account
                 </Button>
             </div>
         );
@@ -67,26 +67,26 @@ export function DeleteAccountZone({
 
     return (
         <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-6">
-            <h3 className="text-lg font-semibold text-destructive">Zona de perigo</h3>
+            <h3 className="text-lg font-semibold text-destructive">Danger Zone</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-                Excluir esta conta remove permanentemente todos os seus dados.
+                Deleting this account permanently removes all its data.
             </p>
 
             <AlertDialog open={open} onOpenChange={handleOpenChange}>
                 <AlertDialogTrigger
                     render={
                         <Button variant="destructive" className="mt-4">
-                            Excluir conta
+                            Delete account
                         </Button>
                     }
                 />
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Excluir esta conta?</AlertDialogTitle>
+                        <AlertDialogTitle>Delete this account?</AlertDialogTitle>
                         <AlertDialogDescription>
                             {transactionCount > 0
-                                ? `As ${transactionCount} transações desta conta serão excluídas permanentemente. Esta ação não pode ser desfeita.`
-                                : "Esta ação não pode ser desfeita."}
+                                ? `The ${transactionCount} transactions in this account will be permanently deleted. This action cannot be undone.`
+                                : "This action cannot be undone."}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     {error && (
@@ -95,14 +95,14 @@ export function DeleteAccountZone({
                         </p>
                     )}
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <Button
                             type="button"
                             variant="destructive"
                             disabled={pending}
                             onClick={handleConfirm}
                         >
-                            {pending ? "Excluindo…" : "Excluir"}
+                            {pending ? "Deleting…" : "Delete"}
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

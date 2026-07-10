@@ -30,7 +30,8 @@ export async function createAccountAction(
     const account = await createAccount(db, session.userId, parsed.data);
     if (!account.ok) {
         if (account.error === "ACCOUNT_NAME_ALREADY_EXISTS") {
-            return { fieldErrors: { name: "Já existe uma conta com esse nome" } };
+            return { fieldErrors: { name: "An account with this name already exists" } };
+
         }
         return { error: account.error };
     }
@@ -61,7 +62,7 @@ export async function updateAccountAction(
     const result = await updateAccount(db, session.userId, accountId, parsed.data);
     if (!result.ok) {
         if (result.error === "ACCOUNT_NAME_ALREADY_EXISTS") {
-            return { fieldErrors: { name: "Já existe uma conta com esse nome" } };
+            return { fieldErrors: { name: "An account with this name already exists" } };
         }
         return { error: result.error };
     }

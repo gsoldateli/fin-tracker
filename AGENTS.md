@@ -34,6 +34,10 @@ adding clarity.
 These were each chosen deliberately, with a rejected alternative. Do not
 "improve" them without discussion.
 
+
+### User Experience rules
+- All user facing text must be in english.
+
 ### Money is always an integer, in cents
 
 `amountCents: integer`, never a float. Floats cannot represent currency

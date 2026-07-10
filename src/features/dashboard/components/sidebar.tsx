@@ -11,6 +11,7 @@ import {
   Settings01FreeIcons,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/src/lib/utils"
+import type { IconSvgElement } from "@hugeicons/react"
 
 const NAV = [
   { href: "/", label: "Home", icon: Home01FreeIcons },
@@ -18,6 +19,24 @@ const NAV = [
   { href: "/accounts", label: "My Accounts", icon: BankFreeIcons },
   { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
 ] as const
+
+function NavItem({ href, label, icon }: { href: string; label: string; icon: IconSvgElement }) {
+  const active = useIsActiveLink(href)
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-4 px-6 py-3 text-sm transition-all border-r-4 border-transparent",
+        active
+          ? "bg-primary/15 text-primary border-r-4 border-primary font-semibold shadow-sm"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+      )}
+    >
+      <HugeiconsIcon icon={icon} size={20} />
+      {label}
+    </Link>
+  )
+}
 
 export function Sidebar({
   className,
@@ -37,24 +56,9 @@ export function Sidebar({
       </div>
 
       <nav className="flex-1 py-4">
-        {NAV.map(({ href, label, icon }) => {
-          const active = useIsActiveLink(href)
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-4 px-6 py-3 text-sm transition-all border-r-4 border-transparent",
-                active
-                  ? "bg-primary/15 text-primary border-r-4 border-primary font-semibold shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
-              )}
-            >
-              <HugeiconsIcon icon={icon} size={20} />
-              {label}
-            </Link>
-          )
-        })}
+        {NAV.map(({ href, label, icon }) => (
+          <NavItem key={href} href={href} label={label} icon={icon} />
+        ))}
       </nav>
 
       <div className="border-t border-border p-6">

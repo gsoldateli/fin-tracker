@@ -19,10 +19,10 @@ import { MoneyInput } from "./money-input";
 import type { ActionState } from "../actions";
 
 const ACCOUNT_TYPE_OPTIONS = [
-  { value: "checking" as const, label: "Corrente", icon: BankFreeIcons },
-  { value: "savings" as const, label: "Poupança", icon: PiggyBankFreeIcons },
-  { value: "cash" as const, label: "Dinheiro", icon: Cash01FreeIcons },
-  { value: "credit" as const, label: "Crédito", icon: CreditCardFreeIcons },
+  { value: "checking" as const, label: "Checking", icon: BankFreeIcons },
+  { value: "savings" as const, label: "Savings", icon: PiggyBankFreeIcons },
+  { value: "cash" as const, label: "Cash", icon: Cash01FreeIcons },
+  { value: "credit" as const, label: "Credit", icon: CreditCardFreeIcons },
 ];
 
 interface AccountFormProps {
@@ -50,12 +50,12 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
         <Link
           href="/accounts"
           className="flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-          aria-label="Voltar"
+          aria-label="Back"
         >
           <HugeiconsIcon icon={ArrowLeft01FreeIcons} size={20} />
         </Link>
         <h1 className="text-2xl font-bold text-foreground">
-          {isEditing ? "Editar conta" : "Nova conta"}
+          {isEditing ? "Edit account" : "New account"}
         </h1>
       </div>
 
@@ -66,13 +66,13 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
             htmlFor="name"
             className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
           >
-            Nome da conta
+            Account name
           </label>
           <Input
             id="name"
             name="name"
             defaultValue={defaultValues?.name}
-            placeholder="Ex: Nubank"
+            placeholder="e.g. Nubank"
             required
             autoFocus
             aria-invalid={!!nameError}
@@ -87,7 +87,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
         {/* Tipo de conta */}
         <fieldset className="space-y-2">
           <legend className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Tipo de conta
+            Account type
           </legend>
           <RadioGroupPrimitive
             value={selectedType}
@@ -133,7 +133,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
             htmlFor="initialBalance"
             className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
           >
-            Saldo inicial (opcional)
+            Initial balance (optional)
           </label>
           <MoneyInput
             name="initialBalanceCents"
@@ -142,7 +142,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
             aria-invalid={!!balanceError}
           />
           <p className="text-xs italic text-muted-foreground">
-            Use valor negativo para faturas em aberto
+            Use negative values for outstanding invoices
           </p>
           {balanceError && (
             <p className="text-sm text-destructive" role="alert">
@@ -164,7 +164,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
           className="h-14 w-full rounded-full text-base font-semibold"
           disabled={pending}
         >
-          {pending ? "Salvando…" : isEditing ? "Salvar" : "Criar conta"}
+          {pending ? "Saving…" : isEditing ? "Save" : "Create account"}
         </Button>
 
         {/* Cancel */}
@@ -173,7 +173,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
             href="/accounts"
             className="py-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
           >
-            Cancelar
+            Cancel
           </Link>
         </div>
       </form>

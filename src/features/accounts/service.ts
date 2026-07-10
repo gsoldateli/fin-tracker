@@ -33,7 +33,7 @@ export async function createAccount(
                 amountCents: initialBalanceCents,
                 accountId: account.id,
                 userId,
-                description: "Saldo inicial",
+                description: "Initial balance",
                 date: new Date(),
             });
         }
@@ -116,7 +116,7 @@ export async function updateAccount(
                     amountCents: initialBalanceCents,
                     accountId,
                     userId,
-                    description: "Saldo inicial",
+                    description: "Initial balance",
                     date: new Date(),
                 });
             }
@@ -201,7 +201,7 @@ export async function transfer(db: Database, userId: string, input: TransferInpu
                 counterpartyAccountId: toId,
                 transferGroupId,
                 userId,
-                description: input.description ?? "Transferência",
+                description: input.description ?? "Transfer",
                 date: now,
                 createdAt: now,
             },
@@ -212,7 +212,7 @@ export async function transfer(db: Database, userId: string, input: TransferInpu
                 counterpartyAccountId: fromId,
                 transferGroupId,
                 userId,
-                description: input.description ?? "Transferência",
+                description: input.description ?? "Transfer",
                 date: now,
                 createdAt: now,
             },

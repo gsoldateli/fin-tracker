@@ -1,7 +1,7 @@
 import { describe, it } from "vitest";
 import { createTestDb } from "@/tests/helpers/db";
 import { createAccount, deleteAccount, transfer, updateAccount } from "./service";
-import { transactions, users } from "@/src/db/schema";
+import { transactions } from "@/src/db/schema";
 import { and, eq } from "drizzle-orm";
 import { findOrCreateUser } from "../auth/service";
 import { listAccountsWithBalance } from "./queries";
@@ -264,7 +264,8 @@ describe("accounts service", () => {
             expect(transferRes.ok).toBe(true);
 
             if (transferRes.ok) {
-                transferRes.value.transferGroupId
+                const { transferGroupId } = transferRes.value
+                expect(transferGroupId).toBeDefined()
 
                 // check transactions
                 const sourceAccountTransaction = await db.select().from(transactions).where(and(eq(transactions.transferGroupId, transferRes.value.transferGroupId), eq(transactions.userId, userId), eq(transactions.accountId, sourceAccount.value.id)));
