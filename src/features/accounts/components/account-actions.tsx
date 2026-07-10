@@ -15,6 +15,7 @@ export function AccountActions() {
         Transfer between accounts
       </Button>
       <Button
+        nativeButton={false}
         render={<Link href="/accounts/new" />}
         className="flex items-center gap-2 h-14 px-6 text-base font-semibold rounded-full"
       >
