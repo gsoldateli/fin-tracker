@@ -14,7 +14,7 @@ export async function createAccountAction(
     formData: FormData,
 ): Promise<ActionState> {
     const session = await getSession();
-    if (!session) return { error: "Não autenticado" };
+    if (!session) return { error: "Not authenticated" };
 
     const parsed = createAccountSchema.safeParse({
         name: formData.get("name"),
@@ -24,8 +24,9 @@ export async function createAccountAction(
     if (!parsed.success) return { error: parsed.error.issues[0].message };
 
     const account = await createAccount(db, session.userId, parsed.data);
+    if (!account.ok) return { error: account.error };
 
-    logger.info({ action: "create_account", userId: session.userId, accountId: account.id });
+    logger.info({ action: "create_account", userId: session.userId, accountId: account.value.id });
     revalidatePath("/accounts");
     return {};
 }
@@ -34,7 +35,7 @@ export async function deleteAccountAction(
     accountId: string,
 ): Promise<ActionState> {
     const session = await getSession();
-    if (!session) return { error: "Não autenticado" };
+    if (!session) return { error: "Not authenticated" };
 
     const result = await deleteAccount(db, session.userId, accountId);
     if (!result.ok) return { error: result.error };
