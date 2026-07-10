@@ -6,10 +6,17 @@ import { createTestDb } from "@/tests/helpers/db";
 import { findOrCreateUser } from "./service";
 
 describe("findOrCreateUser", () => {
-    let db: Awaited<ReturnType<typeof createTestDb>>;
+    let db: Awaited<ReturnType<typeof createTestDb>>['db'];
+    let cleanupDb: Awaited<ReturnType<typeof createTestDb>>['cleanup'];
 
     beforeEach(async () => {
-        db = await createTestDb();
+        const dbSut = await createTestDb();
+        db = dbSut.db;
+        cleanupDb = dbSut.cleanup;
+    });
+
+    afterEach(async () => {
+        await cleanupDb();
     });
 
     it("cadastra um novo usuário quando o e-mail não existe", async () => {
