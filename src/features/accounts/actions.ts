@@ -81,5 +81,5 @@ export async function deleteAccountAction(
     if (!result.ok) return { error: result.error };
 
     revalidatePath("/accounts");
-    return {};
+    redirect("/accounts");
 }

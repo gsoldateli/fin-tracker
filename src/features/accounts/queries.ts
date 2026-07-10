@@ -31,6 +31,30 @@ export async function getAccountInitialBalanceCents(
     return row?.amountCents ?? 0;
 }
 
+export async function getAccountDeletionInfo(
+    db: Database,
+    userId: string,
+    accountId: string,
+) {
+    const [result] = await db
+        .select({
+            transactionCount: sql<number>`COUNT(CASE WHEN ${transactions.type} != 'transfer' THEN 1 END)`,
+            hasTransfersCount: sql<number>`COUNT(CASE WHEN ${transactions.type} = 'transfer' THEN 1 END)`,
+        })
+        .from(transactions)
+        .where(
+            and(
+                eq(transactions.accountId, accountId),
+                eq(transactions.userId, userId),
+            ),
+        );
+
+    return {
+        transactionCount: result.transactionCount,
+        hasTransfers: result.hasTransfersCount > 0,
+    };
+}
+
 export async function listAccountsWithBalance(
     db: Database,
     userId: string,
