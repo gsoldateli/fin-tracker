@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   BankFreeIcons,
@@ -72,12 +73,12 @@ export function AccountsTable({ accounts }: { accounts: Account[] }) {
                 {formatBRL(a.balanceCents)}
               </TableCell>
               <TableCell className="text-center">
-                <button
-                  type="button"
-                  className="flex h-9 w-9 items-center justify-center text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100 active:scale-95"
+                <Link
+                  href={`/accounts/${a.id}/edit`}
+                  className="inline-flex h-9 w-9 items-center justify-center text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100 active:scale-95"
                 >
                   <HugeiconsIcon icon={Edit01FreeIcons} size={16} />
-                </button>
+                </Link>
               </TableCell>
             </TableRow>
           )

@@ -1,7 +1,7 @@
 import { eq, and, sql, inArray } from "drizzle-orm";
 import type { Database } from "@/src/db/client";
 import { accounts, transactions } from "@/src/db/schema";
-import type { CreateAccountInput, TransferInput } from "./schemas";
+import type { CreateAccountInput, TransferInput, UpdateAccountInput } from "./schemas";
 import { randomUUID } from "node:crypto";
 
 export async function createAccount(
@@ -39,6 +39,90 @@ export async function createAccount(
         }
 
         return { ok: true as const, value: account };
+    });
+}
+
+export async function updateAccount(
+    db: Database,
+    userId: string,
+    accountId: string,
+    input: UpdateAccountInput,
+) {
+    const initialBalanceCents = input.initialBalanceCents ?? 0;
+    if (!Number.isInteger(initialBalanceCents)) {
+        return { ok: false as const, error: "INVALID_INITIAL_BALANCE" as const };
+    }
+
+    return db.transaction(async (tx) => {
+        const [account] = await tx
+            .select()
+            .from(accounts)
+            .where(and(eq(accounts.id, accountId), eq(accounts.userId, userId)));
+
+        if (!account) {
+            return { ok: false as const, error: "ACCOUNT_NOT_FOUND" as const };
+        }
+
+        if (input.name !== account.name) {
+            const [duplicate] = await tx
+                .select()
+                .from(accounts)
+                .where(
+                    and(
+                        eq(accounts.name, input.name),
+                        eq(accounts.userId, userId),
+                        sql`${accounts.id} != ${accountId}`,
+                    ),
+                )
+                .limit(1);
+
+            if (duplicate) {
+                return { ok: false as const, error: "ACCOUNT_NAME_ALREADY_EXISTS" as const };
+            }
+        }
+
+        const [updated] = await tx
+            .update(accounts)
+            .set({ name: input.name, type: input.type })
+            .where(eq(accounts.id, accountId))
+            .returning();
+
+        const [existingInitialBalance] = await tx
+            .select()
+            .from(transactions)
+            .where(
+                and(
+                    eq(transactions.accountId, accountId),
+                    eq(transactions.type, "initial_balance"),
+                ),
+            )
+            .limit(1);
+
+        if (initialBalanceCents === 0) {
+            if (existingInitialBalance) {
+                await tx
+                    .delete(transactions)
+                    .where(eq(transactions.id, existingInitialBalance.id));
+            }
+        } else {
+            if (existingInitialBalance) {
+                await tx
+                    .update(transactions)
+                    .set({ amountCents: initialBalanceCents })
+                    .where(eq(transactions.id, existingInitialBalance.id));
+            } else {
+                await tx.insert(transactions).values({
+                    type: "initial_balance",
+                    amountCents: initialBalanceCents,
+                    accountId,
+                    userId,
+                    description: "Saldo inicial",
+                    date: new Date(),
+                });
+            }
+        }
+
+        return { ok: true as const, value: updated };
     });
 }
 

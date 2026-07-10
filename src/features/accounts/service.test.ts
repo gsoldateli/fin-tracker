@@ -1,6 +1,6 @@
 import { describe, it } from "vitest";
 import { createTestDb } from "@/tests/helpers/db";
-import { createAccount, deleteAccount, transfer } from "./service";
+import { createAccount, deleteAccount, transfer, updateAccount } from "./service";
 import { transactions, users } from "@/src/db/schema";
 import { and, eq } from "drizzle-orm";
 import { findOrCreateUser } from "../auth/service";
@@ -429,4 +429,174 @@ describe("accounts service", () => {
         })
     })
 
+    describe("updateAccount", () => {
+        it("updates name and type", async () => {
+            const accountRes = await createAccount(db, userId, {
+                name: "Old name",
+                type: "checking",
+            });
+            expect(accountRes.ok).toBe(true);
+            if (!accountRes.ok) throw new Error("Failed to create account");
+
+            const result = await updateAccount(db, userId, accountRes.value.id, {
+                name: "New name",
+                type: "savings",
+                initialBalanceCents: 0,
+            });
+
+            expect(result.ok).toBe(true);
+            if (result.ok) {
+                expect(result.value.name).toBe("New name");
+                expect(result.value.type).toBe("savings");
+            }
+        });
+
+        it("upserts initial_balance transaction when balance changes", async () => {
+            const accountRes = await createAccount(db, userId, {
+                name: "Test",
+                type: "checking",
+                initialBalanceCents: 5000,
+            });
+            expect(accountRes.ok).toBe(true);
+            if (!accountRes.ok) throw new Error("Failed to create account");
+
+            const result = await updateAccount(db, userId, accountRes.value.id, {
+                name: "Test",
+                type: "checking",
+                initialBalanceCents: 10000,
+            });
+
+            expect(result.ok).toBe(true);
+            const [tx] = await db
+                .select()
+                .from(transactions)
+                .where(
+                    and(
+                        eq(transactions.accountId, accountRes.value.id),
+                        eq(transactions.type, "initial_balance"),
+                    ),
+                );
+            expect(tx.amountCents).toBe(10000);
+        });
+
+        it("deletes initial_balance transaction when balance is cleared to 0", async () => {
+            const accountRes = await createAccount(db, userId, {
+                name: "Test",
+                type: "checking",
+                initialBalanceCents: 5000,
+            });
+            expect(accountRes.ok).toBe(true);
+            if (!accountRes.ok) throw new Error("Failed to create account");
+
+            const result = await updateAccount(db, userId, accountRes.value.id, {
+                name: "Test",
+                type: "checking",
+                initialBalanceCents: 0,
+            });
+
+            expect(result.ok).toBe(true);
+            const txs = await db
+                .select()
+                .from(transactions)
+                .where(
+                    and(
+                        eq(transactions.accountId, accountRes.value.id),
+                        eq(transactions.type, "initial_balance"),
+                    ),
+                );
+            expect(txs).toHaveLength(0);
+        });
+
+        it("inserts initial_balance transaction when setting balance for the first time", async () => {
+            const accountRes = await createAccount(db, userId, {
+                name: "Test",
+                type: "checking",
+                initialBalanceCents: 0,
+            });
+            expect(accountRes.ok).toBe(true);
+            if (!accountRes.ok) throw new Error("Failed to create account");
+
+            const result = await updateAccount(db, userId, accountRes.value.id, {
+                name: "Test",
+                type: "checking",
+                initialBalanceCents: 7500,
+            });
+
+            expect(result.ok).toBe(true);
+            const [tx] = await db
+                .select()
+                .from(transactions)
+                .where(
+                    and(
+                        eq(transactions.accountId, accountRes.value.id),
+                        eq(transactions.type, "initial_balance"),
+                    ),
+                );
+            expect(tx.amountCents).toBe(7500);
+        });
+
+        it("rejects duplicate name among user's other accounts", async () => {
+            await createAccount(db, userId, {
+                name: "Existing account",
+                type: "savings",
+            });
+            const targetRes = await createAccount(db, userId, {
+                name: "Target",
+                type: "checking",
+            });
+            expect(targetRes.ok).toBe(true);
+            if (!targetRes.ok) throw new Error("Failed to create account");
+
+            const result = await updateAccount(db, userId, targetRes.value.id, {
+                name: "Existing account",
+                type: "checking",
+                initialBalanceCents: 0,
+            });
+
+            expect(result).toStrictEqual({
+                ok: false,
+                error: "ACCOUNT_NAME_ALREADY_EXISTS",
+            });
+        });
+
+        it("returns ACCOUNT_NOT_FOUND for wrong userId", async () => {
+            const accountRes = await createAccount(db, userId, {
+                name: "Test",
+                type: "checking",
+            });
+            expect(accountRes.ok).toBe(true);
+            if (!accountRes.ok) throw new Error("Failed to create account");
+
+            const result = await updateAccount(db, "other-user-id", accountRes.value.id, {
+                name: "Test",
+                type: "checking",
+                initialBalanceCents: 0,
+            });
+
+            expect(result).toStrictEqual({
+                ok: false,
+                error: "ACCOUNT_NOT_FOUND",
+            });
+        });
+
+        it("allows keeping the same name when other fields change", async () => {
+            const accountRes = await createAccount(db, userId, {
+                name: "My Account",
+                type: "checking",
+            });
+            expect(accountRes.ok).toBe(true);
+            if (!accountRes.ok) throw new Error("Failed to create account");
+
+            const result = await updateAccount(db, userId, accountRes.value.id, {
+                name: "My Account",
+                type: "savings",
+                initialBalanceCents: 0,
+            });
+
+            expect(result.ok).toBe(true);
+            if (result.ok) {
+                expect(result.value.type).toBe("savings");
+            }
+        });
+    });
 });

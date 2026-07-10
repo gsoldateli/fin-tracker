@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   BankFreeIcons,
@@ -25,10 +26,12 @@ function formatBRL(c: number) {
 }
 
 export function AccountCard({
+  id,
   name,
   type,
   balanceCents,
 }: {
+  id: string
   name: string
   type: string
   balanceCents: number
@@ -59,12 +62,12 @@ export function AccountCard({
           >
             {formatBRL(balanceCents)}
           </span>
-          <button
-            type="button"
+          <Link
+            href={`/accounts/${id}/edit`}
             className="flex h-11 w-11 items-center justify-center text-muted-foreground hover:text-foreground transition-colors active:scale-95"
           >
             <HugeiconsIcon icon={Edit01FreeIcons} size={18} />
-          </button>
+          </Link>
         </div>
       </div>
     </Card>
