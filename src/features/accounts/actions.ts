@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { db } from "@/src/db/client";
+import { getDb } from "@/src/db/client";
 import { getSession } from "@/src/lib/session";
 import { logger } from "@/src/lib/logger";
 import { createAccountSchema, updateAccountSchema } from "./schemas";
@@ -17,6 +17,8 @@ export async function createAccountAction(
     const session = await getSession();
     if (!session) return { error: "Not authenticated" };
 
+
+
     const parsed = createAccountSchema.safeParse({
         name: formData.get("name"),
         type: formData.get("type"),
@@ -26,7 +28,7 @@ export async function createAccountAction(
         const field = parsed.error.issues[0].path[0] as string;
         return { fieldErrors: { [field]: parsed.error.issues[0].message } };
     }
-
+    const db = getDb()
     const account = await createAccount(db, session.userId, parsed.data);
     if (!account.ok) {
         if (account.error === "ACCOUNT_NAME_ALREADY_EXISTS") {
@@ -58,7 +60,7 @@ export async function updateAccountAction(
         const field = parsed.error.issues[0].path[0] as string;
         return { fieldErrors: { [field]: parsed.error.issues[0].message } };
     }
-
+    const db = getDb()
     const result = await updateAccount(db, session.userId, accountId, parsed.data);
     if (!result.ok) {
         if (result.error === "ACCOUNT_NAME_ALREADY_EXISTS") {
@@ -78,6 +80,7 @@ export async function deleteAccountAction(
     const session = await getSession();
     if (!session) return { error: "Not authenticated" };
 
+    const db = getDb()
     const result = await deleteAccount(db, session.userId, accountId);
     if (!result.ok) return { error: result.error };
 

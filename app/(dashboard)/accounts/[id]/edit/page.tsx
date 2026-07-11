@@ -1,6 +1,6 @@
 import { redirect, notFound } from "next/navigation"
 import { getSession } from "@/src/lib/session"
-import { db } from "@/src/db/client"
+import { getDb } from "@/src/db/client"
 import { getAccountById, getAccountInitialBalanceCents, getAccountDeletionInfo } from "@/src/features/accounts/queries"
 import { AccountForm } from "@/src/features/accounts/components/account-form"
 import { DeleteAccountZone } from "@/src/features/accounts/components/delete-account-zone"
@@ -17,6 +17,7 @@ export default async function EditAccountPage({
 
   const { id } = await params
 
+  const db = getDb()
   const account = await getAccountById(db, session.userId, id)
   if (!account) notFound()
 

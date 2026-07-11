@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { getSession } from "@/src/lib/session"
-import { db } from "@/src/db/client"
+import { getDb } from "@/src/db/client"
 import { listAccountsWithBalance } from "@/src/features/accounts/queries"
 import { AccountCard } from "@/src/features/accounts/components/account-card"
 import { AccountsTable } from "@/src/features/accounts/components/accounts-table"
@@ -19,7 +19,7 @@ function formatBRL(c: number) {
 export default async function AccountsPage() {
   const session = await getSession()
   if (!session) redirect("/login")
-
+  const db = getDb();
   const accounts = await listAccountsWithBalance(db, session.userId)
   const total = accounts.reduce((s, a) => s + a.balanceCents, 0)
 

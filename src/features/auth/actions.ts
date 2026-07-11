@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { db } from "@/src/db/client";
+import { getDb } from "@/src/db/client";
 import { loginSchema } from "./schemas";
 import { findOrCreateUser } from "./service";
 import { createSession } from "@/src/lib/session";
@@ -17,7 +17,7 @@ export async function loginAction(
     if (!parsed.success) {
         return { error: parsed.error.issues[0].message };
     }
-
+    const db = getDb()
     const start = Date.now();
     const user = await findOrCreateUser(db, parsed.data.email);
     await createSession(user.id);

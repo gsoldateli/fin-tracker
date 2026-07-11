@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import { db } from "@/src/db/client"
+import { getDb } from "@/src/db/client"
 import { getSession } from "@/src/lib/session"
 import { users } from "@/src/db/schema"
 import { eq } from "drizzle-orm"
@@ -13,7 +13,7 @@ export default async function DashboardLayout({
 }) {
   const session = await getSession()
   if (!session) redirect("/login")
-
+  const db = getDb();
   const [user] = await db
     .select({ email: users.email })
     .from(users)
