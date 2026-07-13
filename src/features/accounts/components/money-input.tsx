@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, type KeyboardEvent, type ClipboardEvent } from "react";
+import { useState, useCallback, type KeyboardEvent, type ClipboardEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { pushDigit, popDigit, formatCentsToReal } from "@/src/lib/money";
 
 interface MoneyInputProps {
-  name: string;
+  name?: string;
   defaultCents?: number;
+  value?: number;
+  onChange?: (cents: number) => void;
   allowNegative?: boolean;
   "aria-invalid"?: boolean;
 }
@@ -14,10 +16,27 @@ interface MoneyInputProps {
 export function MoneyInput({
   name,
   defaultCents = 0,
+  value: controlledValue,
+  onChange: controlledOnChange,
   allowNegative = false,
   "aria-invalid": ariaInvalid,
 }: MoneyInputProps) {
-  const [cents, setCents] = useState(defaultCents);
+  const [internalCents, setInternalCents] = useState(defaultCents);
+  const controlled = controlledOnChange !== undefined;
+  const cents = controlled ? (controlledValue ?? 0) : internalCents;
+
+  const setCents = useCallback(
+    (nextCents: number | ((prev: number) => number)) => {
+      if (controlled) {
+        const next =
+          typeof nextCents === "function" ? nextCents(controlledValue ?? 0) : nextCents;
+        controlledOnChange?.(next);
+      } else {
+        setInternalCents(nextCents);
+      }
+    },
+    [controlled, controlledValue, controlledOnChange],
+  );
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key >= "0" && e.key <= "9") {
@@ -68,12 +87,12 @@ export function MoneyInput({
         value={displayValue}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
-        onChange={() => { }}
+        onChange={() => {}}
         className="pl-12 text-lg font-medium"
         placeholder="0,00"
         aria-invalid={ariaInvalid}
       />
-      <input type="hidden" name={name} value={cents} />
+      {name && <input type="hidden" name={name} value={cents} />}
     </div>
   );
 }
