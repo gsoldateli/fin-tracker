@@ -7,6 +7,7 @@ import { logger } from "@/src/lib/logger";
 import { transferSchema } from "@/src/features/accounts/schemas";
 import { transfer } from "@/src/features/accounts/service";
 import type { ActionState } from "@/src/features/accounts/actions";
+import { listTransactions, type TransactionWithRelations, type ListTransactionsOpts } from "./queries";
 
 export async function transferAction(
   _prev: ActionState,
@@ -52,4 +53,33 @@ export async function transferAction(
   revalidatePath("/accounts");
 
   return {};
+}
+
+export async function loadMoreTransactions(
+  filters: {
+    period?: string;
+    type?: string;
+    account?: string;
+    category?: string;
+    q?: string;
+    from?: string;
+    to?: string;
+  },
+  cursor?: { date: number; id: string } | null,
+): Promise<{ items: TransactionWithRelations[]; nextCursor: { date: number; id: string } | null }> {
+  const session = await getSession();
+  if (!session) return { items: [], nextCursor: null };
+
+  const opts: ListTransactionsOpts = {};
+
+  if (filters.period) opts.period = filters.period as ListTransactionsOpts["period"];
+  if (filters.type) opts.type = filters.type as ListTransactionsOpts["type"];
+  if (filters.account) opts.accountId = filters.account;
+  if (filters.category) opts.categoryId = filters.category;
+  if (filters.q) opts.search = filters.q;
+  if (filters.from) opts.from = new Date(filters.from);
+  if (filters.to) opts.to = new Date(filters.to);
+  if (cursor) opts.cursor = cursor;
+
+  return listTransactions(getDb(), session.userId, opts);
 }
