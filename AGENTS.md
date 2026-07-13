@@ -100,6 +100,16 @@ your own accounts does not change net worth; counting both legs inflates
 both income and expense for that period. There must be a test asserting
 this explicitly.
 
+### Never delete existing migrations
+
+Drizzle migrations are append-only. When the schema changes, run
+`npm run drizzle:generate` to create a **new** migration file. Never
+delete or regenerate an existing migration — it may have already been
+applied on a deployed database, and removing it breaks migration history.
+
+If `npm run drizzle:generate` produces an empty migration (no schema
+changes), delete only that brand-new empty file — never an existing one.
+
 ### No Repository Pattern
 
 Services call Drizzle directly. Drizzle is already a thin, typed
@@ -254,7 +264,8 @@ absence of side effects (balances unchanged, no duplicate row created).
 When adding a new feature, follow this order:
 
 1. Schema in `src/db/schema.ts` (with the right indexes for the queries
-   you know you'll run) → `npm run drizzle:generate`
+   you know you'll run) → `npm run drizzle:generate` — creates a
+   **new** migration; never delete existing ones
 2. `schemas.ts` (Zod, including any discriminated unions needed for
    type-scoped validation)
 3. `service.ts` (business rules, `db` injected as first param, `Result`
