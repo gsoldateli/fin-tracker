@@ -29,7 +29,7 @@ export default async function AccountsPage() {
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold text-primary">My Accounts</h1>
         <div className="hidden sm:flex sm:gap-4">
-          <AccountActions />
+          <AccountActions accounts={accounts} />
         </div>
       </header>
 
@@ -78,7 +78,7 @@ export default async function AccountsPage() {
 
       {/* Mobile actions */}
       <div className="md:hidden">
-        <AccountActions />
+        <AccountActions accounts={accounts} />
       </div>
     </div>
   )
