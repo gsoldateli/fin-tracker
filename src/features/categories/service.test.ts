@@ -4,6 +4,7 @@ import { createTestDb } from "@/tests/helpers/db";
 import { accounts, transactionCategories, transactions } from "@/src/db/schema";
 import { findOrCreateUser } from "@/src/features/auth/service";
 import { createCategory, deleteCategory } from "./service";
+import { getTodayCivilDate } from "@/src/lib/date";
 import { listCategories } from "./queries";
 
 describe("categories service", () => {
@@ -221,7 +222,7 @@ describe("categories service", () => {
         categoryId: created.value.id,
         type: "expense",
         amountCents: -1000,
-        date: new Date(),
+        date: getTodayCivilDate(),
       });
 
       const result = await deleteCategory(db, userId, created.value.id);

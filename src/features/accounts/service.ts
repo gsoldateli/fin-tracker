@@ -3,6 +3,7 @@ import type { Database } from "@/src/db/client";
 import { accounts, transactions } from "@/src/db/schema";
 import type { CreateAccountInput, TransferInput, UpdateAccountInput } from "./schemas";
 import { randomUUID } from "node:crypto";
+import { getTodayCivilDate } from "@/src/lib/date";
 
 export async function createAccount(
     db: Database,
@@ -34,7 +35,7 @@ export async function createAccount(
                 accountId: account.id,
                 userId,
                 description: "Initial balance",
-                date: new Date(),
+                date: input.initialBalanceDate ?? getTodayCivilDate(),
             });
         }
 
@@ -117,7 +118,7 @@ export async function updateAccount(
                     accountId,
                     userId,
                     description: "Initial balance",
-                    date: new Date(),
+                    date: input.initialBalanceDate ?? getTodayCivilDate(),
                 });
             }
         }
@@ -191,30 +192,29 @@ export async function transfer(db: Database, userId: string, input: TransferInpu
         }
 
         const transferGroupId = randomUUID();
-        const now = new Date();
 
         await tx.insert(transactions).values([
             {
                 type: "transfer",
-                amountCents: -amountCents,          // débito
+                amountCents: -amountCents,
                 accountId: fromId,
                 counterpartyAccountId: toId,
                 transferGroupId,
                 userId,
                 description: input.description ?? "Transfer",
-                date: now,
-                createdAt: now,
+                date: input.date ?? getTodayCivilDate(),
+                createdAt: new Date(),
             },
             {
                 type: "transfer",
-                amountCents: amountCents,           // crédito
+                amountCents: amountCents,
                 accountId: toId,
                 counterpartyAccountId: fromId,
                 transferGroupId,
                 userId,
                 description: input.description ?? "Transfer",
-                date: now,
-                createdAt: now,
+                date: input.date ?? getTodayCivilDate(),
+                createdAt: new Date(),
             },
         ]);
 

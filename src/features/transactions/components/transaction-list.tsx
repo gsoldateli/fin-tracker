@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { TransactionRow } from "./transaction-row";
 import { TransactionListSkeleton } from "./transaction-list-skeleton";
 import { loadMoreTransactions } from "../actions";
 import type { TransactionWithRelations } from "../queries";
 import { cn } from "@/src/lib/utils";
+import { getTodayCivilDate, formatCivilDate } from "@/src/lib/date";
 
 type Filters = {
   period?: string;
@@ -17,17 +18,13 @@ type Filters = {
   to?: string;
 };
 
-function getDateLabel(date: Date): string {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterday = new Date(today.getTime() - 86400000);
-  const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-  if (target.getTime() === today.getTime()) return "TODAY";
-  if (target.getTime() === yesterday.getTime()) return "YESTERDAY";
-  return target
-    .toLocaleDateString("en-US", { day: "2-digit", month: "long" })
-    .toUpperCase();
+function getDateLabel(dateStr: string): string {
+  const today = getTodayCivilDate();
+  if (dateStr === today) return "TODAY";
+  const d = new Date();
+  const yesterday = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate() - 1).padStart(2, "0")}`;
+  if (dateStr === yesterday) return "YESTERDAY";
+  return formatCivilDate(dateStr);
 }
 
 function groupByDate(
@@ -47,49 +44,33 @@ export function TransactionList({
   initialCursor,
   filters,
   isPending,
+  onEditTransaction,
 }: {
   initialItems: TransactionWithRelations[];
-  initialCursor: { date: number; id: string } | null;
+  initialCursor: { date: string; createdAt: number; id: string } | null;
   filters: Filters;
   isPending?: boolean;
+  onEditTransaction?: (tx: TransactionWithRelations) => void;
 }) {
-  const [items, setItems] = useState<TransactionWithRelations[]>(initialItems);
-  const [cursor, setCursor] = useState<{ date: number; id: string } | null>(
-    initialCursor,
-  );
+  const [loadedItems, setLoadedItems] = useState<TransactionWithRelations[]>([]);
+  const [cursor, setCursor] = useState(initialCursor);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const loadMore = useCallback(async () => {
-    if (isLoadingMore || !cursor) return;
+  const allItems = [...initialItems, ...loadedItems];
+
+  async function handleLoadMore() {
+    if (!cursor) return;
     setIsLoadingMore(true);
     try {
       const result = await loadMoreTransactions(filters, cursor);
-      setItems((prev) => [...prev, ...result.items]);
+      setLoadedItems((prev) => [...prev, ...result.items]);
       setCursor(result.nextCursor);
     } finally {
       setIsLoadingMore(false);
     }
-  }, [cursor, filters, isLoadingMore]);
+  }
 
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && cursor && !isLoadingMore) {
-          loadMore();
-        }
-      },
-      { rootMargin: "400px" },
-    );
-
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [cursor, isLoadingMore, loadMore]);
-
-  const isEmpty = items.length === 0;
+  const isEmpty = allItems.length === 0;
   const hasFilters = !!(
     filters.period ||
     filters.type ||
@@ -105,7 +86,6 @@ export function TransactionList({
           {hasFilters ? (
             <>
               <p>No transactions found</p>
-              {/* "Clear filters" link would go here */}
             </>
           ) : (
             <p>No transactions yet</p>
@@ -113,7 +93,7 @@ export function TransactionList({
         </div>
       ) : (
         <div className="space-y-12">
-          {Array.from(groupByDate(items).entries()).map(
+          {Array.from(groupByDate(allItems).entries()).map(
             ([dateLabel, groupItems]) => (
               <section key={dateLabel}>
                 <h2 className="mb-4 px-1 text-xs font-bold tracking-widest text-muted-foreground uppercase">
@@ -121,7 +101,7 @@ export function TransactionList({
                 </h2>
                 <div className="space-y-4">
                   {groupItems.map((tx) => (
-                    <TransactionRow key={tx.id} tx={tx} />
+                    <TransactionRow key={tx.id} tx={tx} onEdit={onEditTransaction} />
                   ))}
                 </div>
               </section>
@@ -130,19 +110,17 @@ export function TransactionList({
         </div>
       )}
 
-      {!isEmpty && isLoadingMore && (
+      {isLoadingMore && (
         <div className="mt-4">
           <TransactionListSkeleton rows={2} />
         </div>
       )}
 
-      <div ref={sentinelRef} className="h-px" />
-
-      {cursor && (
+      {cursor && !isEmpty && (
         <div className="flex justify-center py-6">
           <button
             type="button"
-            onClick={loadMore}
+            onClick={handleLoadMore}
             disabled={isLoadingMore}
             className="rounded-full border border-input bg-background px-6 py-2.5 text-sm font-medium text-foreground hover:bg-accent disabled:opacity-50"
           >

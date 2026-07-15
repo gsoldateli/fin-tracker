@@ -5,6 +5,7 @@ import { transactions } from "@/src/db/schema";
 import { and, eq } from "drizzle-orm";
 import { findOrCreateUser } from "../auth/service";
 import { listAccountsWithBalance } from "./queries";
+import { getTodayCivilDate } from "@/src/lib/date";
 
 
 describe("accounts service", () => {
@@ -147,7 +148,7 @@ describe("accounts service", () => {
                 accountId: accountRes.value.id,
                 type: "income",
                 amountCents: 1000,
-                date: new Date(),
+                date: getTodayCivilDate(),
                 description: "Test transaction",
             })
 
@@ -156,7 +157,7 @@ describe("accounts service", () => {
                 accountId: accountRes.value.id,
                 type: "expense",
                 amountCents: -500,
-                date: new Date(),
+                date: getTodayCivilDate(),
                 description: "Test transaction",
             })
 
@@ -186,7 +187,7 @@ describe("accounts service", () => {
                 toId: destinationAccount.value.id,
                 amountCents: 1000,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             expect(transferRes.ok).toBe(true);
@@ -221,7 +222,7 @@ describe("accounts service", () => {
                 toId: destinationAccount.value.id,
                 amountCents: 1000,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             expect(transferRes.ok).toBe(true);
@@ -258,7 +259,7 @@ describe("accounts service", () => {
                 toId: destinationAccount.value.id,
                 amountCents: 1000,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             expect(transferRes.ok).toBe(true);
@@ -313,7 +314,7 @@ describe("accounts service", () => {
                 toId: destinationAccount.value.id,
                 amountCents: 3000,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             const [sourceAccountWithBalance] = await listAccountsWithBalance(db, userId, [sourceAccount.value.id])
@@ -352,7 +353,7 @@ describe("accounts service", () => {
                 toId: destinationAccount.value.id,
                 amountCents: 3000,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             expect(transferRes.ok).toBe(false);
@@ -378,7 +379,7 @@ describe("accounts service", () => {
                 toId: sourceAccount.value.id,
                 amountCents: 3000,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             expect(transferRes.ok).toBe(false);
@@ -411,7 +412,7 @@ describe("accounts service", () => {
                 toId: destinationAccount.value.id,
                 amountCents: -100,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             expect(transferNegativeRes.ok).toBe(false);
@@ -422,7 +423,7 @@ describe("accounts service", () => {
                 toId: destinationAccount.value.id,
                 amountCents: 0,
                 description: "Transfer",
-                date: new Date(),
+                date: getTodayCivilDate(),
             });
 
             expect(transferZeroRes.ok).toBe(false);

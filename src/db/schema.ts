@@ -63,7 +63,7 @@ export const transactions = sqliteTable(
             () => accounts.id,
         ),
         description: text("description", { length: 255 }),
-        date: integer("date", { mode: "timestamp" }).notNull(),
+        date: text("date").notNull(),
 
         createdAt: integer("created_at", { mode: "timestamp" }).notNull().$default(() => new Date()),
     },

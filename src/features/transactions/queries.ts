@@ -10,10 +10,12 @@ export type TransactionWithRelations = {
   type: "income" | "expense" | "transfer" | "initial_balance";
   amountCents: number;
   description: string | null;
-  date: Date;
+  date: string;
+  createdAt: Date;
   accountId: string;
   accountName: string;
   accountType: string;
+  categoryId: string | null;
   categoryName: string | null;
   counterpartyAccountId: string | null;
   counterpartyAccountName: string | null;
@@ -22,36 +24,43 @@ export type TransactionWithRelations = {
 
 export type ListTransactionsOpts = {
   period?: "this-month" | "last-month" | "last-30-days" | "this-year";
-  from?: Date;
-  to?: Date;
+  from?: string;
+  to?: string;
   type?: "income" | "expense" | "transfer";
   accountId?: string;
   categoryId?: string;
   search?: string;
-  cursor?: { date: number; id: string };
+  cursor?: { date: string; createdAt: number; id: string };
   limit?: number;
 };
 
-function resolvePeriod(period: ListTransactionsOpts["period"]): { from: Date; to: Date } | null {
+function pad(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
+function resolvePeriod(period: ListTransactionsOpts["period"]): { from: string; to: string } | null {
   const now = new Date();
   switch (period) {
     case "this-month": {
-      const from = new Date(now.getFullYear(), now.getMonth(), 1);
-      const to = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+      const from = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-01`;
+      const to = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate())}`;
       return { from, to };
     }
     case "last-month": {
-      const from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const to = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+      const first = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const last = new Date(now.getFullYear(), now.getMonth(), 0);
+      const from = `${first.getFullYear()}-${pad(first.getMonth() + 1)}-${pad(first.getDate())}`;
+      const to = `${last.getFullYear()}-${pad(last.getMonth() + 1)}-${pad(last.getDate())}`;
       return { from, to };
     }
     case "last-30-days": {
       const from = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      return { from, to: now };
+      const to = now;
+      return { from: `${from.getFullYear()}-${pad(from.getMonth() + 1)}-${pad(from.getDate())}`, to: `${to.getFullYear()}-${pad(to.getMonth() + 1)}-${pad(to.getDate())}` };
     }
     case "this-year": {
-      const from = new Date(now.getFullYear(), 0, 1);
-      const to = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+      const from = `${now.getFullYear()}-01-01`;
+      const to = `${now.getFullYear()}-12-31`;
       return { from, to };
     }
     default:
@@ -63,7 +72,7 @@ export async function listTransactions(
   db: Database,
   userId: string,
   opts: ListTransactionsOpts = {},
-): Promise<{ items: TransactionWithRelations[]; nextCursor: { date: number; id: string } | null }> {
+): Promise<{ items: TransactionWithRelations[]; nextCursor: { date: string; createdAt: number; id: string } | null }> {
   const limit = Math.min(opts.limit ?? 20, 100);
   const conditions = [eq(transactions.userId, userId)];
 
@@ -98,10 +107,10 @@ export async function listTransactions(
   }
 
   if (opts.cursor) {
-    const cursorDate = new Date(opts.cursor.date);
     const cursorCondition = or(
-      lt(transactions.date, cursorDate) as SQL,
-      and(eq(transactions.date, cursorDate) as SQL, lt(transactions.id, opts.cursor.id) as SQL) as SQL,
+      lt(transactions.date, opts.cursor.date) as SQL,
+      and(eq(transactions.date, opts.cursor.date) as SQL, lt(transactions.createdAt, new Date(opts.cursor.createdAt)) as SQL) as SQL,
+      and(eq(transactions.date, opts.cursor.date) as SQL, eq(transactions.createdAt, new Date(opts.cursor.createdAt)) as SQL, lt(transactions.id, opts.cursor.id) as SQL) as SQL,
     ) as SQL;
     conditions.push(cursorCondition);
   }
@@ -115,9 +124,11 @@ export async function listTransactions(
       amountCents: transactions.amountCents,
       description: transactions.description,
       date: transactions.date,
+      createdAt: transactions.createdAt,
       accountId: transactions.accountId,
       accountName: accounts.name,
       accountType: accounts.type,
+      categoryId: transactions.categoryId,
       categoryName: transactionCategories.name,
       counterpartyAccountId: transactions.counterpartyAccountId,
       counterpartyAccountName: counterpartyAccount.name,
@@ -128,14 +139,14 @@ export async function listTransactions(
     .leftJoin(transactionCategories, eq(transactions.categoryId, transactionCategories.id))
     .leftJoin(counterpartyAccount, eq(transactions.counterpartyAccountId, counterpartyAccount.id))
     .where(and(...conditions.filter((c): c is SQL => c !== undefined)))
-    .orderBy(desc(transactions.date), desc(transactions.id))
+    .orderBy(desc(transactions.date), desc(transactions.createdAt), desc(transactions.id))
     .limit(limit + 1);
 
   const hasMore = rows.length > limit;
   if (hasMore) rows.pop();
 
   const last = rows.at(-1);
-  const nextCursor = hasMore && last ? { date: last.date.getTime(), id: last.id } : null;
+  const nextCursor = hasMore && last ? { date: last.date, createdAt: last.createdAt.getTime(), id: last.id } : null;
 
   return { items: rows as TransactionWithRelations[], nextCursor };
 }

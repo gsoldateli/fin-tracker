@@ -6,7 +6,6 @@ import { transactionCategories } from "@/src/db/schema";
 import { listAccountsWithBalance } from "@/src/features/accounts/queries";
 import { listTransactions, type ListTransactionsOpts } from "@/src/features/transactions/queries";
 import { TransactionsShell } from "@/src/features/transactions/components/transactions-shell";
-import { NewTransactionFab } from "@/src/features/transactions/components/new-transaction-fab";
 
 type SearchParams = Promise<{
   period?: string;
@@ -23,13 +22,13 @@ function parseSearchParams(params: Awaited<SearchParams>): ListTransactionsOpts 
   const { period, type, account, category, q, from, to } = params;
 
   if (period === "custom") {
-    if (from) opts.from = new Date(from);
-    if (to) opts.to = new Date(to);
+    if (from) opts.from = from;
+    if (to) opts.to = to;
   } else if (period) {
     opts.period = period as ListTransactionsOpts["period"];
   } else {
-    if (from) opts.from = new Date(from);
-    if (to) opts.to = new Date(to);
+    if (from) opts.from = from;
+    if (to) opts.to = to;
   }
 
   if (type) opts.type = type as ListTransactionsOpts["type"];
@@ -54,7 +53,6 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
   const { items, nextCursor } = await listTransactions(db, session.userId, opts);
 
   const accounts = await listAccountsWithBalance(db, session.userId);
-  const accountOptions = accounts.map((a) => ({ id: a.id, name: a.name }));
 
   const categories = await db
     .select({ id: transactionCategories.id, name: transactionCategories.name, type: transactionCategories.type })
@@ -80,11 +78,9 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
           from: params.from,
           to: params.to,
         }}
-        accounts={accountOptions}
-        categories={categories}
+        accounts={accounts}
+        categories={categories as { id: string; name: string; type: "income" | "expense" }[]}
       />
-
-      <NewTransactionFab />
     </div>
   );
 }

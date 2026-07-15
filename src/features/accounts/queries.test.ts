@@ -4,6 +4,7 @@ import { createTestDb } from "@/tests/helpers/db";
 import { findOrCreateUser } from "../auth/service";
 import { getAccountDeletionInfo, listAccountsWithBalance } from "./queries";
 import { transactions } from "@/src/db/schema";
+import { getTodayCivilDate } from "@/src/lib/date";
 
 describe('query', () => {
     let db: Awaited<ReturnType<typeof createTestDb>>['db'];
@@ -34,7 +35,7 @@ describe('query', () => {
             accountId: account.id,
             type: "income",
             amountCents: 500,
-            date: new Date(),
+            date: getTodayCivilDate(),
             description: "Test income",
         })
         await db.insert(transactions).values({
@@ -42,7 +43,7 @@ describe('query', () => {
             accountId: account.id,
             type: "expense",
             amountCents: -200,
-            date: new Date(),
+            date: getTodayCivilDate(),
             description: "Test expense",
         })
         const [accountWithBalance] = await listAccountsWithBalance(db, userId, [account.id]);
@@ -75,9 +76,9 @@ describe('query', () => {
             const account = accountRes.value;
 
             await db.insert(transactions).values([
-                { userId, accountId: account.id, type: "income", amountCents: 500, date: new Date(), description: "i1" },
-                { userId, accountId: account.id, type: "expense", amountCents: -200, date: new Date(), description: "e1" },
-                { userId, accountId: account.id, type: "income", amountCents: 300, date: new Date(), description: "i2" },
+                { userId, accountId: account.id, type: "income", amountCents: 500, date: getTodayCivilDate(), description: "i1" },
+                { userId, accountId: account.id, type: "expense", amountCents: -200, date: getTodayCivilDate(), description: "e1" },
+                { userId, accountId: account.id, type: "income", amountCents: 300, date: getTodayCivilDate(), description: "i2" },
             ]);
 
             const info = await getAccountDeletionInfo(db, userId, account.id);
@@ -97,7 +98,7 @@ describe('query', () => {
             const dest = await createAccount(db, userId, { name: "Dest", type: "checking" });
             if (!source.ok || !dest.ok) throw new Error("Failed to create accounts");
 
-            await transfer(db, userId, { fromId: source.value.id, toId: dest.value.id, amountCents: 1000, description: "t", date: new Date() });
+            await transfer(db, userId, { fromId: source.value.id, toId: dest.value.id, amountCents: 1000, description: "t", date: getTodayCivilDate() });
 
             const info = await getAccountDeletionInfo(db, userId, source.value.id);
             expect(info.hasTransfers).toBe(true);
@@ -108,7 +109,7 @@ describe('query', () => {
             const dest = await createAccount(db, userId, { name: "Dest2", type: "checking" });
             if (!source.ok || !dest.ok) throw new Error("Failed to create accounts");
 
-            await transfer(db, userId, { fromId: source.value.id, toId: dest.value.id, amountCents: 1000, description: "t", date: new Date() });
+            await transfer(db, userId, { fromId: source.value.id, toId: dest.value.id, amountCents: 1000, description: "t", date: getTodayCivilDate() });
 
             const info = await getAccountDeletionInfo(db, userId, dest.value.id);
             expect(info.hasTransfers).toBe(true);

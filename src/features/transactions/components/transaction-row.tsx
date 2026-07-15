@@ -1,3 +1,5 @@
+"use client";
+
 import type { TransactionWithRelations } from "../queries";
 import { formatCentsToReal } from "@/src/lib/money";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -39,13 +41,23 @@ const typeConfig = {
   },
 } as const;
 
-export function TransactionRow({ tx }: { tx: TransactionWithRelations }) {
+export function TransactionRow({
+  tx,
+  onEdit,
+}: {
+  tx: TransactionWithRelations;
+  onEdit?: (tx: TransactionWithRelations) => void;
+}) {
   const cfg = typeConfig[tx.type] ?? typeConfig.initial_balance;
   const amountText = formatCentsToReal(Math.abs(tx.amountCents));
   const isTransfer = tx.type === "transfer";
 
   return (
-    <div className="flex items-center gap-4 rounded-2xl bg-card p-4 shadow-sm transition-colors active:bg-accent/50">
+    <button
+      type="button"
+      onClick={() => onEdit?.(tx)}
+      className="flex w-full items-center gap-4 rounded-2xl bg-card p-4 shadow-sm transition-colors active:bg-accent/50 text-left"
+    >
       <div
         className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${cfg.bg}`}
       >
@@ -75,6 +87,6 @@ export function TransactionRow({ tx }: { tx: TransactionWithRelations }) {
         {cfg.prefix}
         {amountText}
       </span>
-    </div>
+    </button>
   );
 }

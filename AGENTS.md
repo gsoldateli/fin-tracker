@@ -35,6 +35,41 @@ These were each chosen deliberately, with a rejected alternative. Do not
 "improve" them without discussion.
 
 
+### Date utilities go through `src/lib/date.ts`
+
+All `date-fns` imports must be centralized in a single barrel file:
+
+```typescript
+// src/lib/date.ts — re-exports only the date-fns functions the app needs
+export { format, parse } from "date-fns";
+```
+
+Every other file imports from `@/src/lib/date`, never directly from
+`date-fns`. If the date library is swapped later, only that one file
+changes — no hunt-and-replace across the codebase.
+
+When a new `date-fns` function is needed, add it to the barrel first,
+then import from it.
+
+### Date has TWO natures — never mix them
+
+1. **INSTANT** ("when did it happen in absolute time") — e.g. `createdAt`.
+   Stored as UTC timestamp (`integer, mode: "timestamp"`). Timezone applies
+   for display. The schema default `$default(() => new Date())` is correct.
+
+2. **CIVIL DATE** ("the day the user chose", no time, no timezone) — e.g.
+   `transactions.date`. Stored as `text("YYYY-MM-DD")`. Timezone never
+   applies — "June 3" is June 3 in any timezone.
+
+Rules:
+- A civil date never becomes a `Date` with hours/timezone in the normal path.
+  It travels as `"YYYY-MM-DD"` string from UI to DB and back.
+- Lexicographic comparison of `"YYYY-MM-DD"` is already chronological — use
+  string `<`/`>` directly for filtering and cursors.
+- Never pass a civil date through `new Date(string)` — that interprets as
+  UTC midnight and shifts the day in negative timezones.
+
+
 ### User Experience rules
 - All user facing text must be in english.
 

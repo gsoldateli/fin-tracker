@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/src/lib/utils";
 import { MoneyInput } from "./money-input";
+import { getTodayCivilDate } from "@/src/lib/date";
 import type { ActionState } from "../actions";
 
 const ACCOUNT_TYPE_OPTIONS = [
@@ -149,6 +150,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
               {balanceError}
             </p>
           )}
+          <input type="hidden" name="initialBalanceDate" defaultValue={getTodayCivilDate()} />
         </div>
 
         {/* General error */}
