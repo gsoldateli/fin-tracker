@@ -17,7 +17,7 @@ const NAV = [
   { href: "/", label: "Home", icon: Home01FreeIcons },
   { href: "/transactions", label: "Transactions", icon: ReceiptTextFreeIcons },
   { href: "/accounts", label: "My Accounts", icon: BankFreeIcons },
-  { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
+  // { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
 ] as const
 
 function NavItem({ href, label, icon }: { href: string; label: string; icon: IconSvgElement }) {
@@ -49,10 +49,10 @@ export function Sidebar({
   return (
     <aside className={cn("bg-card border-r border-border z-50", className)}>
       <div className="flex items-center gap-3 p-6 border-b border-border">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+        {/* <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
           {initials}
-        </div>
-        <span className="font-semibold text-foreground">Fin Tracker</span>
+        </div> */}
+        <span className="font-semibold text-foreground">Fintracker</span>
       </div>
 
       <nav className="flex-1 py-4">

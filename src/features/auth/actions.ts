@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getDb } from "@/src/db/client";
 import { loginSchema } from "./schemas";
 import { findOrCreateUser } from "./service";
-import { createSession } from "@/src/lib/session";
+import { createSession, destroySession } from "@/src/lib/session";
 import { logger } from "@/src/lib/logger";
 
 export type LoginState = { error?: string };
@@ -30,4 +30,9 @@ export async function loginAction(
     });
 
     redirect("/");
+}
+
+export async function logoutAction() {
+  await destroySession();
+  redirect("/login");
 }

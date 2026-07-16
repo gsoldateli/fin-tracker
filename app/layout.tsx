@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fin Tracker",
+  title: "Fintracker",
   description: "Finance tracker for busy people",
 };
 
