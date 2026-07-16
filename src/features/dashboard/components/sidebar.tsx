@@ -60,7 +60,7 @@ export function Sidebar({
           <NavItem key={href} href={href} label={label} icon={icon} />
         ))}
       </nav>
-
+      {/* 
       <div className="border-t border-border p-6">
         <Link
           href="/settings"
@@ -69,7 +69,7 @@ export function Sidebar({
           <HugeiconsIcon icon={Settings01FreeIcons} size={20} />
           Settings
         </Link>
-      </div>
+      </div> */}
     </aside>
   )
 }
