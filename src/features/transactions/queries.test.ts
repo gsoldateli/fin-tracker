@@ -22,7 +22,7 @@ describe("listTransactions", () => {
     db = sut.db;
     cleanupDb = sut.cleanup;
 
-    userId = (await findOrCreateUser(db, "test@test.com")).id;
+    userId = (await findOrCreateUser(db, "test@test.com", false)).id;
 
     const [acc] = await db
       .insert(accounts)
@@ -155,7 +155,7 @@ describe("listTransactions", () => {
   });
 
   it("only returns transactions for the userId", async () => {
-    const otherUser = await findOrCreateUser(db, "other@test.com");
+    const otherUser = await findOrCreateUser(db, "other@test.com", false);
     await db.insert(transactions).values([
       { userId: otherUser.id, accountId, type: "income", amountCents: 9999, date: "2025-07-01" },
     ]);

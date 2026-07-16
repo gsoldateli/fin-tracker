@@ -42,7 +42,7 @@ describe("getCurrentSituation", () => {
     db = sut.db;
     cleanupDb = sut.cleanup;
 
-    userId = (await findOrCreateUser(db, "test@test.com")).id;
+    userId = (await findOrCreateUser(db, "test@test.com", false)).id;
     const acc = await createAccount(db, userId, "Checking");
     accountId = acc.id;
   });
@@ -123,7 +123,7 @@ describe("getCurrentSituation", () => {
   });
 
   it("ignores another user's transactions entirely", async () => {
-    const otherUserId = (await findOrCreateUser(db, "other@test.com")).id;
+    const otherUserId = (await findOrCreateUser(db, "other@test.com", false)).id;
     const otherAccount = await createAccount(db, otherUserId, "Other Checking");
 
     await db.insert(transactions).values([

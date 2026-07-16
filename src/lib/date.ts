@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export { format, parse } from "date-fns";
+export { format, parse, subDays, addDays } from "date-fns";
 
 export function getTodayCivilDate(): string {
   const d = new Date();
