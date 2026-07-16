@@ -8,7 +8,19 @@ import { logger } from "@/src/lib/logger";
 import { createAccountSchema, updateAccountSchema } from "./schemas";
 import { createAccount, updateAccount, deleteAccount } from "./service";
 
-export type ActionState = { error?: string; fieldErrors?: Record<string, string> };
+export type ActionState = {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  success?: boolean;
+  transactionId?: string;
+  type?: string;
+  amountCents?: number;
+  accountId?: string;
+  categoryId?: string | null;
+  date?: string;
+  description?: string | null;
+  action?: string;
+};
 
 export async function createAccountAction(
     _prev: ActionState,
@@ -23,6 +35,7 @@ export async function createAccountAction(
         name: formData.get("name"),
         type: formData.get("type"),
         initialBalanceCents: formData.get("initialBalanceCents"),
+        initialBalanceDate: formData.get("initialBalanceDate")?.toString() || undefined,
     });
     if (!parsed.success) {
         const field = parsed.error.issues[0].path[0] as string;
@@ -55,6 +68,7 @@ export async function updateAccountAction(
         name: formData.get("name"),
         type: formData.get("type"),
         initialBalanceCents: formData.get("initialBalanceCents"),
+        initialBalanceDate: formData.get("initialBalanceDate")?.toString() || undefined,
     });
     if (!parsed.success) {
         const field = parsed.error.issues[0].path[0] as string;

@@ -3,23 +3,10 @@
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   BankFreeIcons,
-  Cash01FreeIcons,
-  PiggyBankFreeIcons,
-  CreditCardFreeIcons,
   CheckmarkCircle01FreeIcons,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/src/lib/utils"
-import type { IconSvgElement } from "@hugeicons/react"
-
-export const ACCOUNT_TYPE_MAP: Record<
-  string,
-  { label: string; icon: IconSvgElement }
-> = {
-  checking: { label: "Institution", icon: BankFreeIcons },
-  cash: { label: "Cash", icon: Cash01FreeIcons },
-  savings: { label: "Investment", icon: PiggyBankFreeIcons },
-  credit: { label: "Credit", icon: CreditCardFreeIcons },
-}
+import { ACCOUNT_TYPE_MAP } from "@/src/features/accounts/constants"
 
 export function formatBRL(c: number) {
   return (c / 100).toLocaleString("pt-BR", {

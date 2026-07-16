@@ -2,19 +2,19 @@ import { describe, it, expect } from "vitest";
 import { loginSchema } from "./schemas";
 
 describe("loginSchema", () => {
-    it("normaliza e-mail para lowercase e remove espaços", () => {
+    it("normalizes email to lowercase and removes spaces", () => {
         const result = loginSchema.parse({ email: "  Foo@Bar.COM " });
         expect(result.email).toBe("foo@bar.com");
     });
 
-    it.each(["", "não-é-email", "a@", "@b.com", "sem-arroba.com"])(
-        "rejeita e-mail inválido: '%s'",
+    it.each(["", "not-an-email", "a@", "@b.com", "missing-at.com"])(
+        "rejects invalid email: '%s'",
         (email) => {
             expect(loginSchema.safeParse({ email }).success).toBe(false);
         }
     );
 
-    it("rejeita e-mail acima de 255 caracteres", () => {
+    it("rejects email longer than 255 characters", () => {
         const huge = "a".repeat(250) + "@x.com";
         expect(loginSchema.safeParse({ email: huge }).success).toBe(false);
     });

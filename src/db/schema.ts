@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, index, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 
 const uuidGenerator = () => crypto.randomUUID();
@@ -28,8 +28,17 @@ export const accounts = sqliteTable(
 export const transactionCategories = sqliteTable("transaction_categories", {
     id: text("id").primaryKey().$defaultFn(uuidGenerator),
     name: text("name", { length: 50 }).notNull(),
+    userId: text("user_id")
+        .notNull()
+        .references(() => users.id, { onDelete: "cascade" }),
     type: text("type", { enum: ["income", "expense"] }).notNull(),
-});
+},
+    (table) => [index("transaction_categories_user_id_idx").on(table.userId),
+    uniqueIndex("transaction_categories_user_name_type_unique").on(
+        table.userId,
+        table.name,
+        table.type,
+    ),]);
 
 export const transactions = sqliteTable(
     "transactions",
@@ -54,7 +63,7 @@ export const transactions = sqliteTable(
             () => accounts.id,
         ),
         description: text("description", { length: 255 }),
-        date: integer("date", { mode: "timestamp" }).notNull(),
+        date: text("date").notNull(),
 
         createdAt: integer("created_at", { mode: "timestamp" }).notNull().$default(() => new Date()),
     },

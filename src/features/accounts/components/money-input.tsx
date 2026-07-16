@@ -39,6 +39,23 @@ export function MoneyInput({
   );
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // Allow modifier combos (Ctrl/Cmd for copy/paste/select-all, etc.)
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    // Allow navigation keys
+    if (
+      e.key === "Tab" ||
+      e.key === "Escape" ||
+      e.key === "Enter" ||
+      e.key === "ArrowLeft" ||
+      e.key === "ArrowRight" ||
+      e.key === "ArrowUp" ||
+      e.key === "ArrowDown" ||
+      e.key === "Home" ||
+      e.key === "End"
+    )
+      return;
+
     if (e.key >= "0" && e.key <= "9") {
       e.preventDefault();
       setCents((prev) => pushDigit(prev, parseInt(e.key, 10)));
@@ -47,7 +64,11 @@ export function MoneyInput({
 
     if (e.key === "Backspace") {
       e.preventDefault();
-      setCents((prev) => popDigit(prev));
+      if (e.shiftKey) {
+        setCents(0);
+      } else {
+        setCents((prev) => popDigit(prev));
+      }
       return;
     }
 
@@ -57,6 +78,7 @@ export function MoneyInput({
       return;
     }
 
+    // Block anything else (letters, symbols)
     e.preventDefault();
   };
 
@@ -88,7 +110,7 @@ export function MoneyInput({
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         onChange={() => {}}
-        className="pl-12 text-lg font-medium"
+        className="pl-12 font-medium"
         placeholder="0,00"
         aria-invalid={ariaInvalid}
       />

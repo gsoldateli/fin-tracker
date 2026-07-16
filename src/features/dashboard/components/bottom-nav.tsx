@@ -25,9 +25,9 @@ function NavItem({ href, label, icon }: { href: string; label: string; icon: Ico
     <Link
       href={href}
       className={cn(
-        "flex flex-col items-center justify-center gap-0.5 h-11 min-w-[64px] rounded-full px-4 transition-all",
+        "flex flex-col items-center justify-center gap-0.5 h-full min-w-[64px] px-4 transition-all",
         active
-          ? "bg-primary/10 text-primary font-semibold padding-10"
+          ? "bg-primary/10 text-primary font-semibold border-t border-t-primary shadow-[inset_0_2px_0_0_hsl(var(--primary))]"
           : "text-muted-foreground hover:text-foreground",
       )}
     >
