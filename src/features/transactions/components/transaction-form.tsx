@@ -338,7 +338,7 @@ export function TransactionForm({
                 <div
                   ref={amountContainerRef}
                   className={cn(
-                    "rounded-xl border bg-card p-4 transition-colors focus-within:border-primary",
+                    "rounded-xl bg-card transition-colors focus-within:border-primary",
                     state.type === "expense" && "focus-within:border-destructive",
                   )}
                 >

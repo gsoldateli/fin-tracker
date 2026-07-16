@@ -130,9 +130,6 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
             allowNegative
             aria-invalid={!!balanceError}
           />
-          <p className="text-xs italic text-muted-foreground">
-            Use negative values for outstanding invoices
-          </p>
           {balanceError && (
             <p className="text-sm text-destructive" role="alert">
               {balanceError}
