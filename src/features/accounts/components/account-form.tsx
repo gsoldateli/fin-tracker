@@ -5,26 +5,14 @@ import Link from "next/link";
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  BankFreeIcons,
-  PiggyBankFreeIcons,
-  Cash01FreeIcons,
-  CreditCardFreeIcons,
-  ArrowLeft01FreeIcons,
-} from "@hugeicons/core-free-icons";
+import { ArrowLeft01FreeIcons } from "@hugeicons/core-free-icons";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/src/lib/utils";
 import { MoneyInput } from "./money-input";
 import { getTodayCivilDate } from "@/src/lib/date";
 import type { ActionState } from "../actions";
-
-const ACCOUNT_TYPE_OPTIONS = [
-  { value: "checking" as const, label: "Checking", icon: BankFreeIcons },
-  { value: "savings" as const, label: "Savings", icon: PiggyBankFreeIcons },
-  { value: "cash" as const, label: "Cash", icon: Cash01FreeIcons },
-  { value: "credit" as const, label: "Credit", icon: CreditCardFreeIcons },
-];
+import { ACCOUNT_TYPE_OPTIONS } from "../constants";
 
 interface AccountFormProps {
   action: (prev: ActionState, formData: FormData) => Promise<ActionState>;

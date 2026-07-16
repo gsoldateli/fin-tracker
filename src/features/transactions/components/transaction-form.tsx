@@ -21,8 +21,9 @@ import {
 import { MoneyInput } from "@/src/features/accounts/components/money-input";
 import { toast } from "sonner";
 import { saveTransactionAction, deleteTransactionAction } from "../actions";
-import { formatCentsToReal } from "@/src/lib/money";
 import { getTodayCivilDate } from "@/src/lib/date";
+import { CategoryPicker } from "@/src/features/categories/components/category-picker";
+import { AccountPicker } from "@/src/features/accounts/components/account-picker";
 
 type FormType = "expense" | "income";
 
@@ -109,7 +110,7 @@ interface EditTxData {
 interface TransactionFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  accounts: { id: string; name: string; balanceCents: number }[];
+  accounts: { id: string; name: string; type: string; balanceCents: number }[];
   categories: { id: string; name: string; type: "income" | "expense" }[];
   transactionId?: string;
   defaultValues?: EditTxData["defaultValues"];
@@ -172,7 +173,6 @@ export function TransactionForm({
     return fd;
   }, [state, transactionId]);
 
-  const filteredCategories = categories.filter((c) => c.type === state.type);
   const isFormValid = state.amountCents > 0 && state.accountId !== "";
   const errorMessage = submitError ? (ERROR_MAP[submitError] ?? submitError) : null;
   const isLoading = isSubmitting || saveMorePending || deletePending;
@@ -284,7 +284,7 @@ export function TransactionForm({
           <form
             ref={formRef}
             onSubmit={handleFormSubmit}
-            className="flex min-h-0 flex-1 flex-col"
+            className="relative flex min-h-0 flex-1 flex-col"
           >
 
             <div className="flex shrink-0 items-start justify-between px-6 pt-4 pb-2">
@@ -356,41 +356,23 @@ export function TransactionForm({
                 <label className="ml-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Category
                 </label>
-                <select
-                  value={state.categoryId}
-                  onChange={(e) =>
-                    dispatch({ type: "SET_CATEGORY", value: e.target.value })
-                  }
-                  className="h-12 w-full min-h-[44px] rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                >
-                  <option value="">Select a category</option>
-                  {filteredCategories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                <CategoryPicker
+                  categories={categories}
+                  selectedId={state.categoryId}
+                  onSelect={(id) => dispatch({ type: "SET_CATEGORY", value: id })}
+                  type={state.type}
+                />
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="ml-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Account
                 </label>
-                <select
-                  value={state.accountId}
-                  onChange={(e) =>
-                    dispatch({ type: "SET_ACCOUNT", value: e.target.value })
-                  }
-                  className="h-12 w-full min-h-[44px] rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                  required
-                >
-                  <option value="">Select an account</option>
-                  {accounts.map((acc) => (
-                    <option key={acc.id} value={acc.id}>
-                      {acc.name} ({formatCentsToReal(acc.balanceCents)})
-                    </option>
-                  ))}
-                </select>
+                <AccountPicker
+                  accounts={accounts}
+                  selectedId={state.accountId}
+                  onSelect={(id) => dispatch({ type: "SET_ACCOUNT", value: id })}
+                />
               </div>
 
               <div className="flex flex-col gap-1">

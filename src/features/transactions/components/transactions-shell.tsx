@@ -24,7 +24,7 @@ type Props = {
   initialCursor: { date: string; createdAt: number; id: string } | null;
   filters: Filters;
   filterHash: string;
-  accounts: { id: string; name: string; balanceCents: number }[];
+  accounts: { id: string; name: string; type: string; balanceCents: number }[];
   categories: { id: string; name: string; type: "income" | "expense" }[];
   basePath?: string;
 };
