@@ -1,14 +1,16 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { getSession } from "@/src/lib/session";
 import { getDb } from "@/src/db/client";
 import { users } from "@/src/db/schema";
-import { getCurrentSituation, getBalanceHistory, getSpendingByCategory } from "@/src/features/dashboard/queries";
-import { listTransactions } from "@/src/features/transactions/queries";
-import { SituationCards } from "@/src/features/dashboard/components/situation-cards";
 import { DashboardHeader } from "@/src/features/dashboard/components/dashboard-header";
-import { ChartsSection } from "@/src/features/dashboard/components/charts-section";
-import { RecentTransactions } from "@/src/features/dashboard/components/recent-transactions";
+import { SituationCardsSection } from "@/src/features/dashboard/components/situation-cards-section";
+import { ChartsSectionWrapper } from "@/src/features/dashboard/components/charts-section-wrapper";
+import { RecentTransactionsSection } from "@/src/features/dashboard/components/recent-transactions-section";
+import { SituationCardsSkeleton } from "@/src/features/dashboard/components/situation-cards-skeleton";
+import { ChartsSkeleton } from "@/src/features/dashboard/components/charts-skeleton";
+import { RecentTransactionsSkeleton } from "@/src/features/dashboard/components/recent-transactions-skeleton";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -23,25 +25,21 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/login");
 
-  const situation = await getCurrentSituation(db, session.userId);
-
-  const [balanceHistory, spendingByCategory, recentTransactions] = await Promise.all([
-    getBalanceHistory(db, session.userId, "last-90-days"),
-    getSpendingByCategory(db, session.userId, "last-90-days"),
-    listTransactions(db, session.userId, { limit: 5 }),
-  ]);
-
-  const monthName = new Date().toLocaleString("en-US", { month: "long" });
-
   return (
     <div className="mx-auto max-w-6xl space-y-8 px-6 py-6 pb-24">
       <DashboardHeader email={user.email} />
 
-      <SituationCards situation={situation} monthName={monthName} />
+      <Suspense fallback={<SituationCardsSkeleton />}>
+        <SituationCardsSection userId={session.userId} />
+      </Suspense>
 
-      <ChartsSection initialData={{ balanceHistory, spendingByCategory }} />
+      <Suspense fallback={<ChartsSkeleton />}>
+        <ChartsSectionWrapper userId={session.userId} />
+      </Suspense>
 
-      <RecentTransactions transactions={recentTransactions.items} />
+      <Suspense fallback={<RecentTransactionsSkeleton />}>
+        <RecentTransactionsSection userId={session.userId} />
+      </Suspense>
     </div>
   );
 }
