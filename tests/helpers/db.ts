@@ -1,15 +1,24 @@
+// tests/helpers/db.ts
+import { randomUUID } from "node:crypto";
+import { tmpdir } from "node:os";
+import path, { join } from "node:path";
+import { unlink } from "node:fs/promises";
+import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
-import path from "path";
 
 export async function createTestDb() {
-    const db = drizzle({
-        connection: {
-            url: ":memory:",
-        }
-    });
+    const tmpPath = join(tmpdir(), `fintracker-test-${randomUUID()}.db`);
+    const client = createClient({ url: `file:${tmpPath}` });
+    const db = drizzle({ client });
 
-    await migrate(db, { migrationsFolder: path.resolve(__dirname, "../../src/drizzle") });
+    await migrate(db, { migrationsFolder: path.resolve(__dirname, "../../drizzle") });
 
-    return db;
+    return {
+        db,
+        async cleanup() {
+            client.close();
+            await unlink(tmpPath).catch(() => { });
+        },
+    };
 }
