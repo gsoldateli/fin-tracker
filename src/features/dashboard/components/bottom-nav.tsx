@@ -7,7 +7,6 @@ import {
   Home01FreeIcons,
   ReceiptTextFreeIcons,
   BankFreeIcons,
-  Chart01FreeIcons,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/src/lib/utils"
 import type { IconSvgElement } from "@hugeicons/react"

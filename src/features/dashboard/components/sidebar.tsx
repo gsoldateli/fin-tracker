@@ -7,8 +7,6 @@ import {
   Home01FreeIcons,
   ReceiptTextFreeIcons,
   BankFreeIcons,
-  Chart01FreeIcons,
-  Settings01FreeIcons,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/src/lib/utils"
 import type { IconSvgElement } from "@hugeicons/react"
@@ -40,11 +38,10 @@ function NavItem({ href, label, icon }: { href: string; label: string; icon: Ico
 
 export function Sidebar({
   className,
-  initials,
 }: {
   className: string
   email?: string
-  initials: string
+  initials?: string
 }) {
   return (
     <aside className={cn("bg-card border-r border-border z-50", className)}>

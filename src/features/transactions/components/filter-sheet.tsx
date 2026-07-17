@@ -72,7 +72,7 @@ export function FilterSheet({
     setPrevOpen(false);
   }
 
-  const { period: localPeriod, type: localType, account: localAccount, category: localCategory, from: localFrom, to: localTo } = state;
+  const { period: localPeriod, type: localType, account: localAccount, category: localCategory } = state;
 
   const filteredCategories = localType
     ? categories.filter((c) => c.type === localType)
