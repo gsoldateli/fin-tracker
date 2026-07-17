@@ -6,10 +6,8 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 const PERIODS = [
   { value: "this-month", label: "This month" },
-  { value: "last-month", label: "Last month" },
-  { value: "last-30-days", label: "Last 30 days" },
-  { value: "this-year", label: "This year" },
-  { value: "custom", label: "Custom" },
+  { value: "last-90-days", label: "Last 90 days" },
+  { value: "ytd", label: "Year to date" },
 ] as const;
 
 const TYPES = [
@@ -31,7 +29,7 @@ type FilterState = {
   category: string;
   from: string;
   to: string;
-  customOpen: boolean;
+
 };
 
 function readFilterState(searchParams: URLSearchParams): FilterState {
@@ -43,7 +41,6 @@ function readFilterState(searchParams: URLSearchParams): FilterState {
     category: searchParams.get("category") || "",
     from: searchParams.get("from") || "",
     to: searchParams.get("to") || "",
-    customOpen: period === "custom",
   };
 }
 
@@ -75,7 +72,7 @@ export function FilterSheet({
     setPrevOpen(false);
   }
 
-  const { period: localPeriod, type: localType, account: localAccount, category: localCategory, from: localFrom, to: localTo, customOpen } = state;
+  const { period: localPeriod, type: localType, account: localAccount, category: localCategory, from: localFrom, to: localTo } = state;
 
   const filteredCategories = localType
     ? categories.filter((c) => c.type === localType)
@@ -83,13 +80,8 @@ export function FilterSheet({
 
   function applyFilters() {
     const sp = new URLSearchParams();
-    if (localPeriod === "custom") {
-      if (localFrom) sp.set("period", "custom");
-      if (localFrom) sp.set("from", localFrom);
-      if (localTo) sp.set("to", localTo);
-    } else if (localPeriod) {
-      sp.set("period", localPeriod);
-    }
+
+    sp.set("period", localPeriod);
     if (localType) sp.set("type", localType);
     if (localAccount) sp.set("account", localAccount);
     if (localCategory) sp.set("category", localCategory);
@@ -136,15 +128,12 @@ export function FilterSheet({
                 <button
                   key={p.value}
                   type="button"
-                    onClick={() => {
-                    if (p.value === "custom") {
-                      setState(prev => ({ ...prev, customOpen: !prev.customOpen, period: !prev.customOpen ? "custom" : "" }));
-                    } else {
-                      setState(prev => ({ ...prev, customOpen: false, period: prev.period === p.value ? "" : p.value }));
-                    }
+                  onClick={() => {
+
+                    setState(prev => ({ ...prev, period: prev.period === p.value ? "" : p.value }));
+
                   }}
                   className={chipClass(
-                    (p.value === "custom" && customOpen) ||
                     localPeriod === p.value,
                   )}
                 >
@@ -152,32 +141,7 @@ export function FilterSheet({
                 </button>
               ))}
             </div>
-            {customOpen && (
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <label className="flex flex-col gap-1">
-                  <span className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                    From
-                  </span>
-                  <input
-                    type="date"
-                    value={localFrom}
-                    onChange={(e) => setState(prev => ({ ...prev, from: e.target.value }))}
-                    className="rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground"
-                  />
-                </label>
-                <label className="flex flex-col gap-1">
-                  <span className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                    To
-                  </span>
-                  <input
-                    type="date"
-                    value={localTo}
-                    onChange={(e) => setState(prev => ({ ...prev, to: e.target.value }))}
-                    className="rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground"
-                  />
-                </label>
-              </div>
-            )}
+
           </section>
 
           {/* Type */}
@@ -241,14 +205,14 @@ export function FilterSheet({
                   onClick={() => setState(prev => ({ ...prev, category: "" }))}
                   className={chipClass(!localCategory)}
                 >
-                All
-              </button>
-              {filteredCategories.map((c) => (
+                  All
+                </button>
+                {filteredCategories.map((c) => (
                   <button
                     key={c.id}
                     type="button"
                     onClick={() =>
-                    setState(prev => ({ ...prev, category: prev.category === c.id ? "" : c.id }))
+                      setState(prev => ({ ...prev, category: prev.category === c.id ? "" : c.id }))
                     }
                     className={chipClass(localCategory === c.id)}
                   >

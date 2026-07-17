@@ -3,9 +3,10 @@ import { eq } from "drizzle-orm";
 import { getSession } from "@/src/lib/session";
 import { getDb } from "@/src/db/client";
 import { users } from "@/src/db/schema";
-import { getCurrentSituation } from "@/src/features/dashboard/queries";
+import { getCurrentSituation, getBalanceHistory, getSpendingByCategory } from "@/src/features/dashboard/queries";
 import { SituationCards } from "@/src/features/dashboard/components/situation-cards";
 import { DashboardHeader } from "@/src/features/dashboard/components/dashboard-header";
+import { ChartsSection } from "@/src/features/dashboard/components/charts-section";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -22,6 +23,11 @@ export default async function DashboardPage() {
 
   const situation = await getCurrentSituation(db, session.userId);
 
+  const [balanceHistory, spendingByCategory] = await Promise.all([
+    getBalanceHistory(db, session.userId, "last-90-days"),
+    getSpendingByCategory(db, session.userId, "last-90-days"),
+  ]);
+
   const monthName = new Date().toLocaleString("en-US", { month: "long" });
 
   return (
@@ -29,6 +35,8 @@ export default async function DashboardPage() {
       <DashboardHeader email={user.email} />
 
       <SituationCards situation={situation} monthName={monthName} />
+
+      <ChartsSection initialData={{ balanceHistory, spendingByCategory }} />
     </div>
   );
 }
