@@ -38,7 +38,7 @@ export function ChartsSection({ initialData }: { initialData: ChartData }) {
   return (
     <section className="space-y-4">
       <PeriodSelector value={period} onChange={handlePeriodChange} />
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <BalanceHistoryChart
           data={data.balanceHistory}
           granularity={GRANULARITY[period]}

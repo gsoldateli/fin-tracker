@@ -46,7 +46,7 @@ export function WhereItWentChart({
   }));
 
   return (
-    <Card className={cn("transition-opacity duration-200", loading && "opacity-40")}>
+    <Card className={cn("transition-opacity duration-200 @container", loading && "opacity-40")}>
       <CardHeader>
         <CardTitle>Where it went</CardTitle>
       </CardHeader>
@@ -56,30 +56,30 @@ export function WhereItWentChart({
             No expenses in this period
           </p>
         ) : (
-          <div className="flex flex-col items-start gap-4 md:flex-row">
-            <div className="w-full md:w-[60%]">
+          <div className="flex flex-col gap-4 @md:flex-row @md:items-start">
+            <div className="flex justify-center @md:w-[55%]">
               <ResponsiveContainer width="100%" height={260}>
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  dataKey="totalCents"
-                  nameKey="categoryName"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  strokeWidth={0}
-                >
-                  {chartData.map((entry, idx) => (
-                    <Cell key={idx} fill={entry.fill} />
-                  ))}
-                </Pie>
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                <Tooltip content={PieTooltip as any} />
-              </PieChart>
-            </ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    dataKey="totalCents"
+                    nameKey="categoryName"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    strokeWidth={0}
+                  >
+                    {chartData.map((entry, idx) => (
+                      <Cell key={idx} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  <Tooltip content={PieTooltip as any} />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
-            <div className="min-w-0 flex-1 space-y-1.5 pt-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 @md:flex-col @md:pt-4 @md:w-[45%]">
               {chartData.map((d, idx) => {
                 const percent = total > 0 ? ((d.totalCents / total) * 100).toFixed(1) : "0.0";
                 return (
@@ -88,8 +88,8 @@ export function WhereItWentChart({
                       className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
                       style={{ backgroundColor: d.fill }}
                     />
-                    <span className="truncate max-w-[120px]">{d.categoryName}</span>
-                    <span className="ml-auto tabular-nums font-medium text-foreground">
+                    <span className="truncate max-w-[100px]">{d.categoryName}</span>
+                    <span className="tabular-nums font-medium text-foreground">
                       {percent}%
                     </span>
                   </div>
