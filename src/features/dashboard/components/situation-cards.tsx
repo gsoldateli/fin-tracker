@@ -21,7 +21,7 @@ export function SituationCards({
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Total Balance
           </p>
-          <p className="mt-2 text-3xl font-bold text-primary tabular-nums">
+          <p className="mt-2 text-2xl font-bold text-primary tabular-nums">
             R$ {formatCentsToReal(situation.totalBalanceCents)}
           </p>
         </div>

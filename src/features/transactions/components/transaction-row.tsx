@@ -2,6 +2,7 @@
 
 import type { TransactionWithRelations } from "../queries";
 import { formatCentsToReal } from "@/src/lib/money";
+import { cn } from "@/src/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   MoneyReceive01FreeIcons,
@@ -44,19 +45,26 @@ const typeConfig = {
 export function TransactionRow({
   tx,
   onEdit,
+  readOnly = false,
 }: {
   tx: TransactionWithRelations;
   onEdit?: (tx: TransactionWithRelations) => void;
+  readOnly?: boolean;
 }) {
   const cfg = typeConfig[tx.type] ?? typeConfig.initial_balance;
   const amountText = formatCentsToReal(Math.abs(tx.amountCents));
   const isTransfer = tx.type === "transfer";
 
+  const Component = readOnly ? "div" : "button";
+  const buttonProps = readOnly ? {} : { type: "button" as const, onClick: () => onEdit?.(tx) };
+
   return (
-    <button
-      type="button"
-      onClick={() => onEdit?.(tx)}
-      className="flex w-full items-center gap-4 rounded-2xl bg-card p-4 shadow-sm transition-colors active:bg-accent/50 text-left"
+    <Component
+      {...buttonProps}
+      className={cn(
+        "flex w-full items-center gap-4 rounded-2xl bg-card p-4 shadow-sm text-left",
+        !readOnly && "transition-colors active:bg-accent/50",
+      )}
     >
       <div
         className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${cfg.bg}`}
@@ -87,6 +95,6 @@ export function TransactionRow({
         {cfg.prefix}
         {amountText}
       </span>
-    </button>
+    </Component>
   );
 }

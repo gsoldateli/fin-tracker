@@ -4,9 +4,11 @@ import { getSession } from "@/src/lib/session";
 import { getDb } from "@/src/db/client";
 import { users } from "@/src/db/schema";
 import { getCurrentSituation, getBalanceHistory, getSpendingByCategory } from "@/src/features/dashboard/queries";
+import { listTransactions } from "@/src/features/transactions/queries";
 import { SituationCards } from "@/src/features/dashboard/components/situation-cards";
 import { DashboardHeader } from "@/src/features/dashboard/components/dashboard-header";
 import { ChartsSection } from "@/src/features/dashboard/components/charts-section";
+import { RecentTransactions } from "@/src/features/dashboard/components/recent-transactions";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -23,9 +25,10 @@ export default async function DashboardPage() {
 
   const situation = await getCurrentSituation(db, session.userId);
 
-  const [balanceHistory, spendingByCategory] = await Promise.all([
+  const [balanceHistory, spendingByCategory, recentTransactions] = await Promise.all([
     getBalanceHistory(db, session.userId, "last-90-days"),
     getSpendingByCategory(db, session.userId, "last-90-days"),
+    listTransactions(db, session.userId, { limit: 5 }),
   ]);
 
   const monthName = new Date().toLocaleString("en-US", { month: "long" });
@@ -37,6 +40,8 @@ export default async function DashboardPage() {
       <SituationCards situation={situation} monthName={monthName} />
 
       <ChartsSection initialData={{ balanceHistory, spendingByCategory }} />
+
+      <RecentTransactions transactions={recentTransactions.items} />
     </div>
   );
 }
