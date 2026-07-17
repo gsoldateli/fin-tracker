@@ -7,7 +7,6 @@ import {
   Home01FreeIcons,
   ReceiptTextFreeIcons,
   BankFreeIcons,
-  Chart01FreeIcons,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/src/lib/utils"
 import type { IconSvgElement } from "@hugeicons/react"
@@ -16,7 +15,7 @@ const TABS = [
   { href: "/", label: "Home", icon: Home01FreeIcons },
   { href: "/accounts", label: "Accounts", icon: BankFreeIcons },
   { href: "/transactions", label: "Transactions", icon: ReceiptTextFreeIcons },
-  { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
+  // { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
 ] as const
 
 function NavItem({ href, label, icon }: { href: string; label: string; icon: IconSvgElement }) {

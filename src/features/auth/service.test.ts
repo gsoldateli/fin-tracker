@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
+import { eq, sql } from "drizzle-orm";
 
-import { transactionCategories, users } from "@/src/db/schema";
+import { accounts as accountsTable, transactionCategories, transactions, users } from "@/src/db/schema";
 import { createTestDb } from "@/tests/helpers/db";
 
 import { findOrCreateUser } from "./service";
@@ -55,6 +56,37 @@ describe("findOrCreateUser", () => {
         expect(a.id).toBe(b.id);
         const rows = await db.select().from(users);
         expect(rows).toHaveLength(1);
+    });
+
+    it("seeds demo accounts with the right total balance", async () => {
+        const user = await findOrCreateUser(db, "demo@test.com");
+
+        const seededAccounts = await db
+            .select()
+            .from(accountsTable)
+            .where(eq(accountsTable.userId, user.id));
+
+        expect(seededAccounts).toHaveLength(2);
+        expect(seededAccounts.map((a) => a.name).sort()).toEqual(["Checking", "Savings"]);
+
+        const [{ total }] = await db
+            .select({ total: sql<number>`COALESCE(SUM(${transactions.amountCents}), 0)` })
+            .from(transactions)
+            .where(eq(transactions.userId, user.id));
+
+        // $9,999 checking + $5,001 savings = $15,000
+        expect(total).toBe(1_500_000);
+    });
+
+    it("does not duplicate accounts or transactions on second login", async () => {
+        await findOrCreateUser(db, "no-dup@test.com");
+        const afterFirst = await db.select().from(accountsTable);
+
+        await findOrCreateUser(db, "no-dup@test.com");
+        const afterSecond = await db.select().from(accountsTable);
+
+        expect(afterSecond).toHaveLength(afterFirst.length);
+        expect(afterFirst.length).toBeGreaterThan(0);
     });
 
     it("logging in twice does not duplicate categories", async () => {

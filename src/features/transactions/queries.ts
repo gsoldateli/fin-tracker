@@ -23,7 +23,7 @@ export type TransactionWithRelations = {
 };
 
 export type ListTransactionsOpts = {
-  period?: "this-month" | "last-month" | "last-30-days" | "this-year";
+  period?: "this-month" | "last-90-days" | "ytd";
   from?: string;
   to?: string;
   type?: "income" | "expense" | "transfer";
@@ -46,21 +46,14 @@ function resolvePeriod(period: ListTransactionsOpts["period"]): { from: string; 
       const to = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate())}`;
       return { from, to };
     }
-    case "last-month": {
-      const first = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const last = new Date(now.getFullYear(), now.getMonth(), 0);
-      const from = `${first.getFullYear()}-${pad(first.getMonth() + 1)}-${pad(first.getDate())}`;
-      const to = `${last.getFullYear()}-${pad(last.getMonth() + 1)}-${pad(last.getDate())}`;
-      return { from, to };
-    }
-    case "last-30-days": {
-      const from = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    case "last-90-days": {
+      const from = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
       const to = now;
       return { from: `${from.getFullYear()}-${pad(from.getMonth() + 1)}-${pad(from.getDate())}`, to: `${to.getFullYear()}-${pad(to.getMonth() + 1)}-${pad(to.getDate())}` };
     }
-    case "this-year": {
+    case "ytd": {
       const from = `${now.getFullYear()}-01-01`;
-      const to = `${now.getFullYear()}-12-31`;
+      const to = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate())}`;
       return { from, to };
     }
     default:
