@@ -36,7 +36,7 @@ export function TransactionsShell({
   filterHash,
   accounts,
   categories,
-  basePath = "/transactions",
+  basePath = "/dashboard/transactions",
 }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();

@@ -23,7 +23,7 @@ type FilterBarProps = {
 export function FilterBar({
   accounts,
   categories,
-  basePath = "/transactions",
+  basePath = "/dashboard/transactions",
   onNavigate,
 }: FilterBarProps) {
   const router = useRouter();
