@@ -24,11 +24,11 @@ export default async function AccountsPage() {
   const total = accounts.reduce((s, a) => s + a.balanceCents, 0)
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 px-6 py-6">
+    <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
       {/* Header */}
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold text-primary">My Accounts</h1>
-        <div className="hidden sm:flex sm:gap-4">
+        <div className="hidden lg:flex sm:gap-4">
           <AccountActions accounts={accounts} />
         </div>
       </header>
@@ -58,14 +58,14 @@ export default async function AccountsPage() {
       ) : (
         <>
           {/* Mobile cards */}
-          <div className="space-y-4 md:hidden">
+          <div className="space-y-4 lg:hidden">
             {accounts.map((a) => (
               <AccountCard key={a.id} {...a} />
             ))}
           </div>
 
           {/* Desktop table */}
-          <Card className="hidden overflow-hidden md:block">
+          <Card className="hidden overflow-hidden lg:block">
             <div className="border-b border-border px-6 py-4">
               <h2 className="text-lg font-semibold text-foreground">
                 Accounts List
@@ -77,7 +77,7 @@ export default async function AccountsPage() {
       )}
 
       {/* Mobile actions */}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <AccountActions accounts={accounts} />
       </div>
     </div>

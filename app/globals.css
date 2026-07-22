@@ -131,6 +131,14 @@ body {
   --sidebar-ring: oklch(0.554 0.0698 216.299);
 }
 
+@utility scrollbar-hide {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -142,5 +150,12 @@ body {
 
   html {
     @apply font-sans;
+  }
+
+  button:not([data-slot]):focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex="0"]:focus-visible {
+    @apply outline-hidden ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }

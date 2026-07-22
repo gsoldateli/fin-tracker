@@ -15,7 +15,7 @@ export function SituationCards({
   monthName: string;
 }) {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       <Card className="bg-primary/5 border-primary/10">
         <div className="p-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">

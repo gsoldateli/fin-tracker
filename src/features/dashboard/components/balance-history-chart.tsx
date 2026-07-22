@@ -96,7 +96,7 @@ export function BalanceHistoryChart({
                 axisLine={false}
                 width={60}
               />
-              <ReferenceLine y={0} stroke="#d1d5db" />
+              <ReferenceLine y={0} stroke="var(--border)" />
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               <Tooltip content={BalanceTooltip as any} />
               <Area

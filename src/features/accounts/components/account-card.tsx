@@ -41,33 +41,35 @@ export function AccountCard({
 
   return (
     <Card>
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10">
-            <HugeiconsIcon icon={t.icon} size={22} />
+      <div className="@container">
+        <div className="flex flex-col gap-3 @[360px]:flex-row @[360px]:items-center @[360px]:justify-between p-4">
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10">
+              <HugeiconsIcon icon={t.icon} size={22} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t.label}
+              </p>
+              <p className="truncate text-base font-semibold text-foreground">{name}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t.label}
-            </p>
-            <p className="text-base font-semibold text-foreground">{name}</p>
+          <div className="flex items-center gap-2 self-end @[360px]:self-auto">
+            <span
+              className={cn(
+                "text-lg font-bold tabular-nums",
+                neg && "text-destructive",
+              )}
+            >
+              {formatBRL(balanceCents)}
+            </span>
+            <Link
+              href={`/accounts/${id}/edit`}
+              className="flex h-11 w-11 items-center justify-center text-muted-foreground hover:text-foreground transition-colors active:scale-95"
+            >
+              <HugeiconsIcon icon={Edit01FreeIcons} size={18} />
+            </Link>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span
-            className={cn(
-              "text-lg font-bold tabular-nums",
-              neg && "text-destructive",
-            )}
-          >
-            {formatBRL(balanceCents)}
-          </span>
-          <Link
-            href={`/accounts/${id}/edit`}
-            className="flex h-11 w-11 items-center justify-center text-muted-foreground hover:text-foreground transition-colors active:scale-95"
-          >
-            <HugeiconsIcon icon={Edit01FreeIcons} size={18} />
-          </Link>
         </div>
       </div>
     </Card>

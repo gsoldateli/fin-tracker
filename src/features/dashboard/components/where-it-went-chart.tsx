@@ -88,7 +88,7 @@ export function WhereItWentChart({
                       className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
                       style={{ backgroundColor: d.fill }}
                     />
-                    <span className="truncate max-w-[100px]">{d.categoryName}</span>
+                    <span className="min-w-0 truncate max-w-[100px]">{d.categoryName}</span>
                     <span className="tabular-nums font-medium text-foreground">
                       {percent}%
                     </span>
