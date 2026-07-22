@@ -11,15 +11,15 @@ import {
 import { cn } from "@/src/lib/utils"
 import type { IconSvgElement } from "@hugeicons/react"
 
-const TABS = [
-  { href: "/dashboard", label: "Home", icon: Home01FreeIcons },
+const TABS: { href: string; label: string; icon: IconSvgElement; exact?: boolean }[] = [
+  { href: "/dashboard", label: "Home", icon: Home01FreeIcons, exact: true },
   { href: "/dashboard/accounts", label: "Accounts", icon: BankFreeIcons },
   { href: "/dashboard/transactions", label: "Transactions", icon: ReceiptTextFreeIcons },
   // { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
-] as const
+]
 
-function NavItem({ href, label, icon }: { href: string; label: string; icon: IconSvgElement }) {
-  const active = useIsActiveLink(href)
+function NavItem({ href, label, icon, exact }: { href: string; label: string; icon: IconSvgElement; exact?: boolean }) {
+  const active = useIsActiveLink(href, exact)
   return (
     <Link
       href={href}
@@ -45,8 +45,8 @@ export function BottomNav({ className }: { className: string }) {
       )}
     >
       <div className="flex items-center justify-around h-16 px-4 gap-1">
-        {TABS.map(({ href, label, icon }) => (
-          <NavItem key={href} href={href} label={label} icon={icon} />
+        {TABS.map(({ href, label, icon, exact }) => (
+          <NavItem key={href} href={href} label={label} icon={icon} exact={exact} />
         ))}
       </div>
     </nav>

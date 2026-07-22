@@ -11,15 +11,15 @@ import {
 import { cn } from "@/src/lib/utils"
 import type { IconSvgElement } from "@hugeicons/react"
 
-const NAV = [
-  { href: "/dashboard", label: "Home", icon: Home01FreeIcons },
+const NAV: { href: string; label: string; icon: IconSvgElement; exact?: boolean }[] = [
+  { href: "/dashboard", label: "Home", icon: Home01FreeIcons, exact: true },
   { href: "/dashboard/transactions", label: "Transactions", icon: ReceiptTextFreeIcons },
   { href: "/dashboard/accounts", label: "My Accounts", icon: BankFreeIcons },
   // { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
-] as const
+]
 
-function NavItem({ href, label, icon }: { href: string; label: string; icon: IconSvgElement }) {
-  const active = useIsActiveLink(href)
+function NavItem({ href, label, icon, exact }: { href: string; label: string; icon: IconSvgElement; exact?: boolean }) {
+  const active = useIsActiveLink(href, exact)
   return (
     <Link
       href={href}
@@ -53,8 +53,8 @@ export function Sidebar({
       </div>
 
       <nav className="flex-1 py-4">
-        {NAV.map(({ href, label, icon }) => (
-          <NavItem key={href} href={href} label={label} icon={icon} />
+        {NAV.map(({ href, label, icon, exact }) => (
+          <NavItem key={href} href={href} label={label} icon={icon} exact={exact} />
         ))}
       </nav>
       {/* 
