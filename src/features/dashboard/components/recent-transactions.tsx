@@ -37,7 +37,7 @@ export function RecentTransactions({
           Recent transactions
         </CardTitle>
         <Link
-          href="/transactions"
+          href="/dashboard/transactions"
           className="text-sm font-medium text-primary hover:underline"
         >
           View all
@@ -48,7 +48,7 @@ export function RecentTransactions({
           <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">
             <p>No transactions yet</p>
             <Link
-              href="/transactions"
+              href="/dashboard/transactions"
               className="text-primary hover:underline"
             >
               Create your first transaction

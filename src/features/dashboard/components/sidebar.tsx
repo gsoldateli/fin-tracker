@@ -12,9 +12,9 @@ import { cn } from "@/src/lib/utils"
 import type { IconSvgElement } from "@hugeicons/react"
 
 const NAV = [
-  { href: "/", label: "Home", icon: Home01FreeIcons },
-  { href: "/transactions", label: "Transactions", icon: ReceiptTextFreeIcons },
-  { href: "/accounts", label: "My Accounts", icon: BankFreeIcons },
+  { href: "/dashboard", label: "Home", icon: Home01FreeIcons },
+  { href: "/dashboard/transactions", label: "Transactions", icon: ReceiptTextFreeIcons },
+  { href: "/dashboard/accounts", label: "My Accounts", icon: BankFreeIcons },
   // { href: "/reports", label: "Reports", icon: Chart01FreeIcons },
 ] as const
 
