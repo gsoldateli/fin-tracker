@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { MoneyInput } from "@/src/features/accounts/components/money-input"
 import {
   AccountListItem,
-  formatBRL,
+  formatCents,
 } from "./account-list-item"
 import {
   transferReducer,
@@ -144,7 +144,7 @@ Transfer
               onClick={() =>
                 dispatch({ type: "go-to-step", step: "pick-from" })
               }
-              aria-label={fromAccount ? `From: ${fromAccount.name}, Balance: ${formatBRL(fromAccount.balanceCents)}` : "Select source account"}
+              aria-label={fromAccount ? `From: ${fromAccount.name}, Balance: ${formatCents(fromAccount.balanceCents)}` : "Select source account"}
               className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-primary/20 active:scale-[0.98]"
             >
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -163,7 +163,7 @@ Transfer
                     />
                   </div>
                   <span className="block text-sm text-muted-foreground">
-                    Balance: {formatBRL(fromAccount.balanceCents)}
+                    Balance: {formatCents(fromAccount.balanceCents)}
                   </span>
                 </div>
               ) : (
@@ -195,7 +195,7 @@ Transfer
               onClick={() =>
                 dispatch({ type: "go-to-step", step: "pick-to" })
               }
-              aria-label={toAccount ? `To: ${toAccount.name}, Balance: ${formatBRL(toAccount.balanceCents)}` : "Select destination account"}
+              aria-label={toAccount ? `To: ${toAccount.name}, Balance: ${formatCents(toAccount.balanceCents)}` : "Select destination account"}
               className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-primary/20 active:scale-[0.98]"
             >
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -214,7 +214,7 @@ Transfer
                     />
                   </div>
                   <span className="block text-sm text-muted-foreground">
-                    Balance: {formatBRL(toAccount.balanceCents)}
+                    Balance: {formatCents(toAccount.balanceCents)}
                   </span>
                 </div>
               ) : (
@@ -262,7 +262,7 @@ Transfer
                     : "text-muted-foreground",
                 )}
               >
-                Available: {formatBRL(fromAccount.balanceCents)}
+                Available: {formatCents(fromAccount.balanceCents)}
               </span>
             )}
           </div>

@@ -16,6 +16,7 @@ import {
   TableCell,
 } from "@/components/ui/table"
 import { cn } from "@/src/lib/utils"
+import { formatCents } from "@/src/lib/money"
 import type { IconSvgElement } from "@hugeicons/react"
 
 const TYPE_MAP: Record<string, { label: string; icon: IconSvgElement }> = {
@@ -23,13 +24,6 @@ const TYPE_MAP: Record<string, { label: string; icon: IconSvgElement }> = {
   cash: { label: "Cash", icon: Cash01FreeIcons },
   savings: { label: "Investment", icon: PiggyBankFreeIcons },
   credit: { label: "Credit", icon: CreditCardFreeIcons },
-}
-
-function formatBRL(c: number) {
-  return (c / 100).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  })
 }
 
 type Account = { id: string; name: string; type: string; balanceCents: number }
@@ -70,7 +64,7 @@ export function AccountsTable({ accounts }: { accounts: Account[] }) {
                   neg && "text-destructive",
                 )}
               >
-                {formatBRL(a.balanceCents)}
+                {formatCents(a.balanceCents)}
               </TableCell>
               <TableCell className="text-center">
                 <Link

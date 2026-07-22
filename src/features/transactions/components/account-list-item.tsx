@@ -6,14 +6,10 @@ import {
   CheckmarkCircle01FreeIcons,
 } from "@hugeicons/core-free-icons"
 import { cn } from "@/src/lib/utils"
+import { formatCents } from "@/src/lib/money"
 import { ACCOUNT_TYPE_MAP } from "@/src/features/accounts/constants"
 
-export function formatBRL(c: number) {
-  return (c / 100).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  })
-}
+export { formatCents }
 
 interface AccountListItemProps {
   id: string
@@ -67,7 +63,7 @@ export function AccountListItem({
             neg ? "text-destructive" : "text-foreground",
           )}
         >
-          {formatBRL(balanceCents)}
+          {formatCents(balanceCents)}
         </span>
         {selected && (
           <HugeiconsIcon

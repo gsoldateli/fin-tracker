@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { formatCentsToReal } from "@/src/lib/money";
+import { formatCents } from "@/src/lib/money";
 
 type Situation = {
   totalBalanceCents: number;
@@ -22,7 +22,7 @@ export function SituationCards({
             Total Balance
           </p>
           <p className="mt-2 text-2xl font-bold text-primary tabular-nums">
-            R$ {formatCentsToReal(situation.totalBalanceCents)}
+            {formatCents(situation.totalBalanceCents)}
           </p>
         </div>
       </Card>
@@ -33,7 +33,7 @@ export function SituationCards({
             Income &middot; {monthName}
           </p>
           <p className="mt-2 text-2xl font-bold text-emerald-600 tabular-nums">
-            R$ {formatCentsToReal(situation.monthIncomeCents)}
+            {formatCents(situation.monthIncomeCents)}
           </p>
         </div>
       </Card>
@@ -44,7 +44,7 @@ export function SituationCards({
             Expenses &middot; {monthName}
           </p>
           <p className="mt-2 text-2xl font-bold text-destructive tabular-nums">
-            R$ {formatCentsToReal(Math.abs(situation.monthExpenseCents))}
+            {formatCents(Math.abs(situation.monthExpenseCents))}
           </p>
         </div>
       </Card>

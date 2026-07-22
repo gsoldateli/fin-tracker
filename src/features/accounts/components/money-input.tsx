@@ -2,7 +2,7 @@
 
 import { useState, useCallback, type KeyboardEvent, type ClipboardEvent } from "react";
 import { Input } from "@/components/ui/input";
-import { pushDigit, popDigit, formatCentsToReal } from "@/src/lib/money";
+import { pushDigit, popDigit, formatCents } from "@/src/lib/money";
 
 interface MoneyInputProps {
   name?: string;
@@ -95,14 +95,10 @@ export function MoneyInput({
     }
   };
 
-  const negative = cents < 0;
-  const displayValue = formatCentsToReal(Math.abs(cents));
+  const displayValue = formatCents(cents);
 
   return (
     <div className="relative">
-      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-base font-medium text-muted-foreground">
-        {negative ? "-R$" : "R$"}
-      </span>
       <Input
         type="text"
         inputMode="numeric"
@@ -110,8 +106,8 @@ export function MoneyInput({
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         onChange={() => {}}
-        className="pl-12 font-medium"
-        placeholder="0,00"
+        className="pl-8 font-medium"
+        placeholder="$0.00"
         aria-invalid={ariaInvalid}
       />
       {name && <input type="hidden" name={name} value={cents} />}

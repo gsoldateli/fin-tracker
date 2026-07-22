@@ -2,19 +2,13 @@ import { redirect } from "next/navigation"
 import { getSession } from "@/src/lib/session"
 import { getDb } from "@/src/db/client"
 import { listAccountsWithBalance } from "@/src/features/accounts/queries"
+import { formatCents } from "@/src/lib/money"
 import { AccountCard } from "@/src/features/accounts/components/account-card"
 import { AccountsTable } from "@/src/features/accounts/components/accounts-table"
 import { AccountActions } from "@/src/features/accounts/components/account-actions"
 import { Card, CardContent } from "@/components/ui/card"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Wallet01FreeIcons } from "@hugeicons/core-free-icons"
-
-function formatBRL(c: number) {
-  return (c / 100).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  })
-}
 
 export default async function AccountsPage() {
   const session = await getSession()
@@ -41,7 +35,7 @@ export default async function AccountsPage() {
               Total Balance
             </p>
             <p className="text-3xl font-bold text-foreground">
-              {formatBRL(total)}
+              {formatCents(total)}
             </p>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">

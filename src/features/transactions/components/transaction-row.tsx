@@ -1,7 +1,7 @@
 "use client";
 
 import type { TransactionWithRelations } from "../queries";
-import { formatCentsToReal } from "@/src/lib/money";
+import { formatCents } from "@/src/lib/money";
 import { cn } from "@/src/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -52,7 +52,7 @@ export function TransactionRow({
   readOnly?: boolean;
 }) {
   const cfg = typeConfig[tx.type] ?? typeConfig.initial_balance;
-  const amountText = formatCentsToReal(Math.abs(tx.amountCents));
+  const amountText = formatCents(Math.abs(tx.amountCents));
   const isTransfer = tx.type === "transfer";
 
   const Component = readOnly ? "div" : "button";

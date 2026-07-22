@@ -1,19 +1,19 @@
 import { z } from "zod";
 
-export const moneyCentsSchema = z.number().int("Valor deve ser em centavos inteiros");
-export const positiveMoneyCentsSchema = moneyCentsSchema.positive("Valor deve ser maior que zero");
+export const moneyCentsSchema = z.number().int("Value must be in whole cents");
+export const positiveMoneyCentsSchema = moneyCentsSchema.positive("Value must be greater than zero");
 
-export function parseRealToCents(input: string): number | null {
+export function parseCents(input: string): number | null {
   const trimmed = input.trim();
   if (!trimmed) return null;
 
   const negative = trimmed.startsWith("-");
   const clean = negative ? trimmed.slice(1) : trimmed;
 
-  const parts = clean.split(",");
+  const parts = clean.split(".");
   if (parts.length > 2) return null;
 
-  const integerPart = parts[0].replace(/\./g, "");
+  const integerPart = parts[0].replace(/,/g, "");
   if (!/^\d+$/.test(integerPart)) return null;
 
   let cents: number;
@@ -29,15 +29,11 @@ export function parseRealToCents(input: string): number | null {
   return negative ? -cents : cents;
 }
 
-export function formatCentsToReal(cents: number): string {
-  const abs = Math.abs(cents);
-  const integerPart = Math.floor(abs / 100);
-  const decimalPart = abs % 100;
-
-  const formattedInteger = integerPart.toLocaleString("pt-BR", { useGrouping: true });
-
-  const result = `${formattedInteger},${String(decimalPart).padStart(2, "0")}`;
-  return cents < 0 ? `-${result}` : result;
+export function formatCents(cents: number): string {
+  return (cents / 100).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 }
 
 export function pushDigit(cents: number, digit: number): number {
@@ -48,6 +44,6 @@ export function pushDigit(cents: number, digit: number): number {
 
 export function popDigit(cents: number): number {
   const abs = Math.abs(cents);
-  const newValue = Math.floor(abs / 10);
+  const newValue = Math.abs(Math.floor(abs / 10));
   return cents < 0 ? -newValue : newValue;
 }

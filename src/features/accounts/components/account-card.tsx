@@ -9,6 +9,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/src/lib/utils"
+import { formatCents } from "@/src/lib/money"
 import type { IconSvgElement } from "@hugeicons/react"
 
 const TYPE_MAP: Record<string, { label: string; icon: IconSvgElement }> = {
@@ -16,13 +17,6 @@ const TYPE_MAP: Record<string, { label: string; icon: IconSvgElement }> = {
   cash: { label: "Cash", icon: Cash01FreeIcons },
   savings: { label: "Investment", icon: PiggyBankFreeIcons },
   credit: { label: "Credit", icon: CreditCardFreeIcons },
-}
-
-function formatBRL(c: number) {
-  return (c / 100).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  })
 }
 
 export function AccountCard({
@@ -61,7 +55,7 @@ export function AccountCard({
                 neg && "text-destructive",
               )}
             >
-              {formatBRL(balanceCents)}
+              {formatCents(balanceCents)}
             </span>
             <Link
               href={`/accounts/${id}/edit`}

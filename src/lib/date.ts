@@ -19,13 +19,11 @@ export function getYesterdayCivilDate(): string {
   return `${y}-${m}-${day}`;
 }
 
+const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export function formatCivilDate(s: string): string {
-  const months = [
-    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
-    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER",
-  ];
   const [, month, day] = s.split("-");
-  return `${day} ${months[parseInt(month, 10) - 1]}`;
+  return `${MONTHS_SHORT[parseInt(month, 10) - 1]} ${parseInt(day, 10)}`;
 }
 
 export function isValidCivilDate(s: string): boolean {
