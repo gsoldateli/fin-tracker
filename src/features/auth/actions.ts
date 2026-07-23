@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { randomUUID } from "node:crypto";
 import { getDb } from "@/src/db/client";
 import { loginSchema } from "./schemas";
 import { findOrCreateUser } from "./service";
@@ -24,6 +25,23 @@ export async function loginAction(
 
     logger.info({
         action: "login",
+        userId: user.id,
+        durationMs: Date.now() - start,
+        outcome: "ok",
+    });
+
+    redirect("/dashboard");
+}
+
+export async function demoAction() {
+    const db = getDb();
+    const start = Date.now();
+    const email = `visitor-${randomUUID()}@fintracker.local`;
+    const user = await findOrCreateUser(db, email);
+    await createSession(user.id);
+
+    logger.info({
+        action: "demo_login",
         userId: user.id,
         durationMs: Date.now() - start,
         outcome: "ok",
