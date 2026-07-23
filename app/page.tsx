@@ -3,13 +3,6 @@ import { getSession } from "@/src/lib/session"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
-import featuresDashboardImg from "@/public/static/features/dashboard.png"
-import featuresTransactionImg from "@/public/static/features/transactions.png"
-import newTransactionImg from "@/public/static/features/new-transaction.png"
-// import featuresAccountsImg from "@/public/static/features/accounts.png"
-import featuresTransferImg from "@/public/static/features/transfers.png"
-import reportsImg from "@/public/static/features/reports.png"
-import gitPipelineImg from "@/public/static/features/git-pipeline.png"
 
 const GITHUB_REPO_URL = "https://github.com/gsoldateli/fin-tracker"
 const GITHUB_PROFILE_URL = "https://github.com/gsoldateli"
@@ -91,12 +84,16 @@ export default async function LandingPage() {
         <div className="w-full max-w-xl shrink-0">
           <Card className="aspect-[3/1.8] overflow-hidden rounded-2xl shadow-xl">
             <Image
-              src={featuresDashboardImg}
+
+              src="/static/features/dashboard.webp"
+
+              width={1600}
+              height={981}
               loading="eager"
 
               alt="FinTracker dashboard showing total balance, monthly income and expenses, and charts"
               className="w-full h-auto rounded-2xl"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              unoptimized
             />
           </Card>
         </div>
@@ -105,16 +102,17 @@ export default async function LandingPage() {
       {/* Features */}
       <section className="bg-card">
         <div className="mx-auto max-w-7xl space-y-20 px-6 py-16 sm:px-10 sm:py-24">
-          {/* Block 1 — image left */}
+
           <div className="flex flex-col items-center gap-8 lg:flex-row lg:gap-16">
             <div className="w-full lg:w-1/2">
               <Card className="aspect-[4/2.56] overflow-hidden rounded-2xl shadow-lg">
                 <Image
-                  src={reportsImg}
+                  src="/static/features/reports.webp"
+                  width={1089}
+                  height={698}
                   loading="eager"
                   alt="FinTracker reports showing income, expense and net balance over time"
                   className="w-full h-auto rounded-2xl"
-                  // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   unoptimized
                 />
               </Card>
@@ -134,10 +132,12 @@ export default async function LandingPage() {
             <div className="w-full lg:w-1/2">
               <Card className="overflow-hidden rounded-2xl shadow-lg">
                 <Image
-                  src={featuresTransactionImg}
+                  src="/static/features/transactions.webp"
+                  width={1256}
+                  height={976}
                   alt="FinTracker transactions list showing transactions with filters"
                   className="w-full h-auto rounded-2xl"
-                // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  unoptimized
                 />
               </Card>
             </div>
@@ -156,10 +156,12 @@ export default async function LandingPage() {
             <div className="w-full lg:w-1/2">
               <Card className="aspect-[4/3] overflow-hidden rounded-2xl shadow-lg">
                 <Image
-                  src={newTransactionImg}
+                  src="/static/features/new-transaction.webp"
+                  width={1020}
+                  height={787}
                   alt="FinTracker new transaction form showing fields for amount, category, description and account"
                   className="w-full h-auto rounded-2xl"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  unoptimized
                 />
               </Card>
             </div>
@@ -178,8 +180,12 @@ export default async function LandingPage() {
             <div className="w-full lg:w-1/2">
               <Card className="aspect-[4/2.9] overflow-hidden rounded-2xl shadow-lg">
                 <Image
-                  src={featuresTransferImg}
+                  src="/static/features/transfers.webp"
+                  width={969}
+                  height={708}
                   alt="FinTracker transfer between accounts screen showing transfer form"
+                  className="w-full h-auto rounded-2xl"
+                  unoptimized
                 />
 
               </Card>
@@ -199,8 +205,12 @@ export default async function LandingPage() {
             <div className="w-full lg:w-1/2">
               <Card className="aspect-[4/2.8] overflow-hidden rounded-2xl shadow-lg">
                 <Image
-                  src={gitPipelineImg}
+                  src="/static/features/git-pipeline.webp"
+                  width={1346}
+                  height={951}
                   alt="FinTracker transfer between accounts screen showing transfer form"
+                  className="w-full h-auto rounded-2xl"
+                  unoptimized
                 />
 
               </Card>
