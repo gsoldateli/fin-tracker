@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { getSession } from "@/src/lib/session"
 import { Button } from "@/components/ui/button"
+import { DemoButton } from "@/src/features/auth/components/demo-button"
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
 
@@ -47,13 +48,7 @@ export default async function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 items-center justify-center lg:justify-start">
             <div className=" flex flex-col items-center gap-1  sm:w-auto">
-              <Button
-                render={<Link href="/login" />}
-                nativeButton={false}
-                className="h-12 w-full rounded-full px-8 text-base font-semibold sm:w-full"
-              >
-                Try the demo
-              </Button>
+              <DemoButton />
             </div>
             <Button
               render={
