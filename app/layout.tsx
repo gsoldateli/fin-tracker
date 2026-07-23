@@ -19,8 +19,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fintracker",
-  description: "Finance tracker for busy people",
+  title: "FinTracker",
+  description:
+    "A personal finance tracker — accounts, transactions, transfers, and cash flow insights. Built with Next.js 16, TypeScript, Drizzle ORM and Turso.",
 };
 
 export default function RootLayout({

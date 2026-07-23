@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { BankFreeIcons } from "@hugeicons/core-free-icons";
 import { cn } from "@/src/lib/utils";
-import { formatCentsToReal } from "@/src/lib/money";
+import { formatCents } from "@/src/lib/money";
 import { EntityPicker } from "@/src/components/entity-picker";
 import { ACCOUNT_TYPE_MAP } from "@/src/features/accounts/constants";
 
@@ -93,7 +93,7 @@ export function AccountPicker({
                 neg ? "text-destructive" : "text-foreground",
               )}
             >
-              {formatCentsToReal(item.balanceCents)}
+              {formatCents(item.balanceCents)}
             </span>
           </>
         );

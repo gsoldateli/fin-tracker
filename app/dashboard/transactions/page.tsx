@@ -60,7 +60,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
     .where(eq(transactionCategories.userId, session.userId));
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 px-6 py-6 pb-24">
+    <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
       <header>
         <h1 className="text-3xl font-bold text-primary">Transactions</h1>
       </header>

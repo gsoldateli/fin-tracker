@@ -32,7 +32,7 @@ export function PeriodSelector({
             type="button"
             onClick={() => onChange(v)}
             className={cn(
-              "rounded-full px-3.5 py-1.5 text-xs font-medium transition-all",
+              "rounded-full px-3.5 py-2.5 text-xs font-medium transition-all",
               value === v
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "bg-muted text-muted-foreground hover:bg-muted-foreground/10 hover:text-foreground",

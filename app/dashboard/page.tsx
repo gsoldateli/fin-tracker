@@ -26,7 +26,7 @@ export default async function DashboardPage() {
   if (!user) redirect("/login");
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 px-6 py-6 pb-24">
+    <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
       <DashboardHeader email={user.email} />
 
       <Suspense fallback={<SituationCardsSkeleton />}>

@@ -19,7 +19,7 @@ export function ChartsSkeleton() {
             <Skeleton className="h-[280px] w-full rounded-lg" />
           </CardContent>
         </Card>
-        <Card>
+        <Card className="@container">
           <CardHeader>
             <Skeleton className="h-5 w-24" />
           </CardHeader>
@@ -28,7 +28,7 @@ export function ChartsSkeleton() {
               <div className="flex justify-center @md:w-[55%]">
                 <Skeleton className="h-[200px] w-[200px] rounded-full" />
               </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1.5 @md:flex-col @md:w-[45%]">
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5 @md:flex-col @md:pt-4 @md:w-[45%]">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
                     <Skeleton className="h-2.5 w-2.5 shrink-0 rounded-full" />

@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import type { TooltipContentProps } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatCentsToReal } from "@/src/lib/money";
+import { formatCents } from "@/src/lib/money";
 import { cn } from "@/src/lib/utils";
 import type { BalanceHistoryRow } from "../queries";
 
@@ -25,12 +25,12 @@ function formatBucket(bucket: string, isMonthly: boolean): string {
 }
 
 function formatYAxis(cents: number): string {
-  const reais = cents / 100;
-  if (reais === 0) return "R$ 0";
-  const abs = Math.abs(reais);
-  if (abs >= 1000) return `R$${Math.round(abs / 1000)}k`;
-  if (abs >= 1) return `R$${Math.round(abs)}`;
-  return `R$ ${reais.toFixed(2)}`;
+  const dollars = cents / 100;
+  if (dollars === 0) return "$0";
+  const abs = Math.abs(dollars);
+  if (abs >= 1000) return `$${Math.round(abs / 1000)}k`;
+  if (abs >= 1) return `$${Math.round(abs)}`;
+  return `$${dollars.toFixed(2)}`;
 }
 
 const BalanceTooltip = ({ active, payload, label }: TooltipContentProps) => {
@@ -41,7 +41,7 @@ const BalanceTooltip = ({ active, payload, label }: TooltipContentProps) => {
     <div className="rounded-lg border bg-card px-3 py-2 shadow-sm text-sm">
       <p className="text-muted-foreground mb-1">{label as string}</p>
       <p className="font-semibold tabular-nums">
-        Balance: R$ {formatCentsToReal(balance)}
+        Balance: {formatCents(balance)}
       </p>
     </div>
   );
@@ -96,7 +96,7 @@ export function BalanceHistoryChart({
                 axisLine={false}
                 width={60}
               />
-              <ReferenceLine y={0} stroke="#d1d5db" />
+              <ReferenceLine y={0} stroke="var(--border)" />
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               <Tooltip content={BalanceTooltip as any} />
               <Area

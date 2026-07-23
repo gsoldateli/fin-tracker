@@ -17,7 +17,7 @@ export function AccountActions({ accounts }: { accounts: AccountInfo[] }) {
       <TransferSheet accounts={accounts} />
       <Button
         nativeButton={false}
-        render={<Link href="/accounts/new" />}
+        render={<Link href="/dashboard/accounts/new" />}
         className="flex items-center gap-2 h-14 px-6 text-base font-semibold rounded-full"
       >
         <HugeiconsIcon icon={Add01FreeIcons} size={22} />

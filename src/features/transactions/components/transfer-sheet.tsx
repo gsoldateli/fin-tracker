@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { MoneyInput } from "@/src/features/accounts/components/money-input"
 import {
   AccountListItem,
-  formatBRL,
+  formatCents,
 } from "./account-list-item"
 import {
   transferReducer,
@@ -123,14 +123,14 @@ function TransferFormContent({
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex shrink-0 items-start justify-between px-6 pt-4 pb-2">
         <div className="flex flex-col gap-1">
-          <h2 className="cn-font-heading text-xl font-bold text-foreground">
+          <h2 className="font-heading text-xl font-bold text-foreground">
 Transfer
           </h2>
           <p className="text-sm text-muted-foreground">
             Move money between your accounts
           </p>
         </div>
-        <Dialog.Close className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted-foreground/20">
+        <Dialog.Close className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted-foreground/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none">
           <HugeiconsIcon icon={Cancel01FreeIcons} size={16} />
           <span className="sr-only">Close</span>
         </Dialog.Close>
@@ -144,6 +144,7 @@ Transfer
               onClick={() =>
                 dispatch({ type: "go-to-step", step: "pick-from" })
               }
+              aria-label={fromAccount ? `From: ${fromAccount.name}, Balance: ${formatCents(fromAccount.balanceCents)}` : "Select source account"}
               className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-primary/20 active:scale-[0.98]"
             >
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -162,7 +163,7 @@ Transfer
                     />
                   </div>
                   <span className="block text-sm text-muted-foreground">
-                    Balance: {formatBRL(fromAccount.balanceCents)}
+                    Balance: {formatCents(fromAccount.balanceCents)}
                   </span>
                 </div>
               ) : (
@@ -194,6 +195,7 @@ Transfer
               onClick={() =>
                 dispatch({ type: "go-to-step", step: "pick-to" })
               }
+              aria-label={toAccount ? `To: ${toAccount.name}, Balance: ${formatCents(toAccount.balanceCents)}` : "Select destination account"}
               className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-primary/20 active:scale-[0.98]"
             >
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -212,7 +214,7 @@ Transfer
                     />
                   </div>
                   <span className="block text-sm text-muted-foreground">
-                    Balance: {formatBRL(toAccount.balanceCents)}
+                    Balance: {formatCents(toAccount.balanceCents)}
                   </span>
                 </div>
               ) : (
@@ -260,7 +262,7 @@ Transfer
                     : "text-muted-foreground",
                 )}
               >
-                Available: {formatBRL(fromAccount.balanceCents)}
+                Available: {formatCents(fromAccount.balanceCents)}
               </span>
             )}
           </div>
