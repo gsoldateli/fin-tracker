@@ -3,7 +3,7 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import type { TooltipContentProps } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatCentsToReal } from "@/src/lib/money";
+import { formatCents } from "@/src/lib/money";
 import { cn } from "@/src/lib/utils";
 import type { SpendingCategoryRow } from "../queries";
 
@@ -25,7 +25,7 @@ const PieTooltip = ({ active, payload }: TooltipContentProps) => {
   return (
     <div className="rounded-lg border bg-card px-3 py-2 shadow-sm text-sm">
       <p className="font-semibold">{row.categoryName}</p>
-      <p className="tabular-nums">R$ {formatCentsToReal(row.totalCents)}</p>
+      <p className="tabular-nums">{formatCents(row.totalCents)}</p>
     </div>
   );
 };
@@ -88,7 +88,7 @@ export function WhereItWentChart({
                       className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
                       style={{ backgroundColor: d.fill }}
                     />
-                    <span className="truncate max-w-[100px]">{d.categoryName}</span>
+                    <span className="min-w-0 truncate max-w-[100px]">{d.categoryName}</span>
                     <span className="tabular-nums font-medium text-foreground">
                       {percent}%
                     </span>

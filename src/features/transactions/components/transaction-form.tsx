@@ -291,13 +291,13 @@ export function TransactionForm({
               <h2 className="text-xl font-bold text-foreground">
                 {isEditing ? "Edit transaction" : "New transaction"}
               </h2>
-              <DialogPrimitive.Close className="flex h-11 w-11 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted-foreground/20">
+              <DialogPrimitive.Close className="flex h-11 w-11 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted-foreground/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none">
                 <HugeiconsIcon icon={Cancel01FreeIcons} size={16} />
                 <span className="sr-only">Close</span>
               </DialogPrimitive.Close>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 space-y-6">
+            <div className="relative min-h-0 flex-1 overflow-y-auto px-6 pb-6 space-y-6">
               <div className="flex rounded-xl bg-muted p-1">
                 <button
                   type="button"
@@ -390,11 +390,12 @@ export function TransactionForm({
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="ml-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                <label htmlFor="description" className="ml-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Description
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border border-border bg-muted/50 px-4 py-3 transition-colors focus-within:border-primary">
                   <Input
+                    id="description"
                     type="text"
                     value={state.description}
                     onChange={(e) =>

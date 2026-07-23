@@ -34,13 +34,17 @@ export function RecentTransactionsSkeleton() {
 
 function SkeletonRow() {
   return (
-    <div className="flex items-center gap-4 rounded-2xl p-4">
-      <Skeleton className="h-12 w-12 shrink-0 rounded-full" />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Skeleton className="mb-1.5 h-5 w-40" />
-        <Skeleton className="h-4 w-24" />
+    <div className="@container rounded-2xl p-4">
+      <div className="flex flex-col gap-3 @[360px]:flex-row @[360px]:items-center @[360px]:gap-4 min-w-0">
+        <div className="flex items-center gap-4 min-w-0">
+          <Skeleton className="h-12 w-12 shrink-0 rounded-full" />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <Skeleton className="mb-1.5 h-5 w-40" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
+        <Skeleton className="h-5 w-20 shrink-0 self-end @[360px]:self-auto @[360px]:ml-auto" />
       </div>
-      <Skeleton className="h-5 w-20 shrink-0" />
     </div>
   );
 }

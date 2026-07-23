@@ -209,11 +209,7 @@ export function EntityPicker<T>({
       role="dialog"
       aria-label={label}
     >
-      <div className="flex justify-center pt-3 pb-1 md:hidden">
-        <div className="h-1.5 w-10 rounded-full bg-muted-foreground/20" />
-      </div>
-
-      <div className="flex shrink-0 items-center gap-2 px-6 pt-2 pb-3">
+      <div className="flex shrink-0 items-center gap-2 px-6 pt-4 pb-3">
         <button
           type="button"
           onClick={handleBack}

@@ -1,3 +1,4 @@
+import { formatCents } from "@/src/lib/money";
 import { DeleteAccountButton } from "./delete-account-button";
 
 type Account = {
@@ -6,15 +7,6 @@ type Account = {
     type: string;
     balanceCents: number;
 };
-
-function formatCents(cents: number): string {
-    const abs = Math.abs(cents);
-    const formatted = (abs / 100).toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
-    return cents < 0 ? `-$${formatted}` : `$${formatted}`;
-}
 
 export function AccountList({ accounts }: { accounts: Account[] }) {
     if (accounts.length === 0) {

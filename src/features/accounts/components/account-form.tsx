@@ -37,7 +37,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
       {/* Header */}
       <div className="mb-8 flex items-center gap-4">
         <Link
-          href="/accounts"
+          href="/dashboard/accounts"
           className="flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
           aria-label="Back"
         >
@@ -157,7 +157,7 @@ export function AccountForm({ action, defaultValues }: AccountFormProps) {
         {/* Cancel */}
         <div className="flex justify-center">
           <Link
-            href="/accounts"
+            href="/dashboard/accounts"
             className="py-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
           >
             Cancel

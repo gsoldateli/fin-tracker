@@ -6,7 +6,7 @@ import { TransactionListSkeleton } from "./transaction-list-skeleton";
 import { loadMoreTransactions } from "../actions";
 import type { TransactionWithRelations } from "../queries";
 import { cn } from "@/src/lib/utils";
-import { getTodayCivilDate, formatCivilDate } from "@/src/lib/date";
+import { getTodayCivilDate, getYesterdayCivilDate, formatCivilDate } from "@/src/lib/date";
 
 type Filters = {
   period?: string;
@@ -21,9 +21,7 @@ type Filters = {
 function getDateLabel(dateStr: string): string {
   const today = getTodayCivilDate();
   if (dateStr === today) return "TODAY";
-  const d = new Date();
-  const yesterday = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate() - 1).padStart(2, "0")}`;
-  if (dateStr === yesterday) return "YESTERDAY";
+  if (dateStr === getYesterdayCivilDate()) return "YESTERDAY";
   return formatCivilDate(dateStr);
 }
 

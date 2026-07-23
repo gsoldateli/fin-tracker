@@ -23,7 +23,7 @@ type FilterBarProps = {
 export function FilterBar({
   accounts,
   categories,
-  basePath = "/transactions",
+  basePath = "/dashboard/transactions",
   onNavigate,
 }: FilterBarProps) {
   const router = useRouter();
@@ -91,6 +91,7 @@ export function FilterBar({
           value={searchInput}
           onChange={(e) => handleSearchChange(e.target.value)}
           placeholder="Search transactions..."
+          aria-label="Search transactions"
           className="w-full rounded-2xl border border-border bg-card py-3 pl-12 pr-4 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
         />
       </div>
@@ -150,7 +151,7 @@ export function FilterBar({
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="flex shrink-0 items-center gap-2 rounded-full bg-muted px-4 py-2 text-sm font-medium text-muted-foreground"
+          className="flex shrink-0 items-center gap-2 rounded-full bg-muted px-4 py-2.5 text-sm font-medium text-muted-foreground"
         >
           <HugeiconsIcon
             icon={FilterFreeIcons}

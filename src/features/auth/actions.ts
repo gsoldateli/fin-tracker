@@ -29,10 +29,10 @@ export async function loginAction(
         outcome: "ok",
     });
 
-    redirect("/");
+    redirect("/dashboard");
 }
 
 export async function logoutAction() {
-  await destroySession();
-  redirect("/login");
+    await destroySession();
+    redirect("/");
 }
