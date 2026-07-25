@@ -88,7 +88,7 @@ export default async function LandingPage() {
 
               alt="FinTracker dashboard showing total balance, monthly income and expenses, and charts"
               className="w-full h-auto rounded-2xl"
-              unoptimized
+
             />
           </Card>
         </div>
@@ -108,7 +108,6 @@ export default async function LandingPage() {
                   loading="eager"
                   alt="FinTracker reports showing income, expense and net balance over time"
                   className="w-full h-auto rounded-2xl"
-                  unoptimized
                 />
               </Card>
             </div>
@@ -132,7 +131,6 @@ export default async function LandingPage() {
                   height={976}
                   alt="FinTracker transactions list showing transactions with filters"
                   className="w-full h-auto rounded-2xl"
-                  unoptimized
                 />
               </Card>
             </div>
@@ -156,7 +154,6 @@ export default async function LandingPage() {
                   height={787}
                   alt="FinTracker new transaction form showing fields for amount, category, description and account"
                   className="w-full h-auto rounded-2xl"
-                  unoptimized
                 />
               </Card>
             </div>
@@ -180,7 +177,7 @@ export default async function LandingPage() {
                   height={708}
                   alt="FinTracker transfer between accounts screen showing transfer form"
                   className="w-full h-auto rounded-2xl"
-                  unoptimized
+
                 />
 
               </Card>
@@ -205,7 +202,6 @@ export default async function LandingPage() {
                   height={951}
                   alt="FinTracker transfer between accounts screen showing transfer form"
                   className="w-full h-auto rounded-2xl"
-                  unoptimized
                 />
 
               </Card>
