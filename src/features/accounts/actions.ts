@@ -9,17 +9,17 @@ import { createAccountSchema, updateAccountSchema } from "./schemas";
 import { createAccount, updateAccount, deleteAccount } from "./service";
 
 export type ActionState = {
-  error?: string;
-  fieldErrors?: Record<string, string>;
-  success?: boolean;
-  transactionId?: string;
-  type?: string;
-  amountCents?: number;
-  accountId?: string;
-  categoryId?: string | null;
-  date?: string;
-  description?: string | null;
-  action?: string;
+    error?: string;
+    fieldErrors?: Record<string, string>;
+    success?: boolean;
+    transactionId?: string;
+    type?: string;
+    amountCents?: number;
+    accountId?: string;
+    categoryId?: string | null;
+    date?: string;
+    description?: string | null;
+    action?: string;
 };
 
 export async function createAccountAction(
@@ -52,8 +52,8 @@ export async function createAccountAction(
     }
 
     logger.info({ action: "create_account", userId: session.userId, accountId: account.value.id });
-    revalidatePath("/accounts");
-    redirect("/accounts");
+    revalidatePath("/dashboard/accounts");
+    redirect("/dashboard/accounts");
 }
 
 export async function updateAccountAction(
@@ -84,8 +84,8 @@ export async function updateAccountAction(
     }
 
     logger.info({ action: "update_account", userId: session.userId, accountId });
-    revalidatePath("/accounts");
-    redirect("/accounts");
+    revalidatePath("/dashboard/accounts");
+    redirect("/dashboard/accounts");
 }
 
 export async function deleteAccountAction(
@@ -98,6 +98,6 @@ export async function deleteAccountAction(
     const result = await deleteAccount(db, session.userId, accountId);
     if (!result.ok) return { error: result.error };
 
-    revalidatePath("/accounts");
-    redirect("/accounts");
+    revalidatePath("/dashboard/accounts");
+    redirect("/dashboard/accounts");
 }
