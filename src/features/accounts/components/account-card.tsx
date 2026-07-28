@@ -58,7 +58,7 @@ export function AccountCard({
               {formatCents(balanceCents)}
             </span>
             <Link
-              href={`/accounts/${id}/edit`}
+              href={`/dashboard/accounts/${id}/edit`}
               className="flex h-11 w-11 items-center justify-center text-muted-foreground hover:text-foreground transition-colors active:scale-95"
             >
               <HugeiconsIcon icon={Edit01FreeIcons} size={18} />

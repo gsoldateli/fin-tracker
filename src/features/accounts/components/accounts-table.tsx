@@ -68,7 +68,7 @@ export function AccountsTable({ accounts }: { accounts: Account[] }) {
               </TableCell>
               <TableCell className="text-center">
                 <Link
-                  href={`/accounts/${a.id}/edit`}
+                  href={`/dashboard/accounts/${a.id}/edit`}
                   className="inline-flex h-9 w-9 items-center justify-center text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100 active:scale-95"
                 >
                   <HugeiconsIcon icon={Edit01FreeIcons} size={16} />
